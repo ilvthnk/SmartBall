@@ -5,8 +5,63 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartBall"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        Title="MainWindow" Height="576" Width="1024">
+    <Grid ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*"></RowDefinition>
+            <RowDefinition Height="0.60*"></RowDefinition>
+            <RowDefinition Height="0.15*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Canvas Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Background="Bisque"></Canvas>
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.30*"></RowDefinition>
+                <RowDefinition Height="0.70*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#68b0f2">Задание</Label>
+            <ScrollViewer Grid.Row="1" Grid.Column="0">
+                <TextBlock></TextBlock>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.15*"></RowDefinition>
+                <RowDefinition Height="0.50*"></RowDefinition>
+                <RowDefinition Height="0.15*"></RowDefinition>
+                <RowDefinition Height="0.20*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.80*"></ColumnDefinition>
+                <ColumnDefinition Width="0.20*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#68b0f2">Последовательность команд</Label>
+            <ScrollViewer Grid.Row="1" Grid.Column="0">
+                <TextBox></TextBox>
+            </ScrollViewer>
+            <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#68b0f2">Однострочный редактор</Label>
+            <TextBox Grid.Row="3" Grid.Column="0"></TextBox>
+            <Button Grid.Row="0" Grid.Column="1">Сохранить</Button>
+            <Button Grid.Row="1" Grid.Column="1">Загрузить</Button>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.30*"></RowDefinition>
+                <RowDefinition Height="0.70*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.80*"></ColumnDefinition>
+                <ColumnDefinition Width="0.20*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#68b0f2">Результат</Label>
+            <TextBlock Grid.Row="1" Grid.Column="0"></TextBlock>
+            <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">Запустить</Button>
+        </Grid>
     </Grid>
 </Window>
