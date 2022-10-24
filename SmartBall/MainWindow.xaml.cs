@@ -22,7 +22,7 @@ namespace SmartBall
     {
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
     }
 }

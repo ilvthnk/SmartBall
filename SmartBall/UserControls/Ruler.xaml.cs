@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MaterialDesignThemes.Wpf;
 
 namespace SmartBall.UserControls
 {
@@ -53,6 +54,7 @@ namespace SmartBall.UserControls
 
                 TextBox letterInput = new TextBox();
 
+                MaterialDesignThemes.Wpf.TextFieldAssist.SetCharacterCounterVisibility(letterInput, Visibility.Hidden);
                 letterInput.FontSize = 16;
                 letterInput.HorizontalAlignment = HorizontalAlignment.Right;
                 letterInput.VerticalAlignment = VerticalAlignment.Center;
