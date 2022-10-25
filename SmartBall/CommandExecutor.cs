@@ -47,6 +47,7 @@ namespace SmartBall
         private string data;
         private string tokens;
         private int dataCursor;
+        public int DataCursor { get { return dataCursor; } }
 
         private bool isStopped = false;
         public bool IsStopped { get { return isStopped; } }

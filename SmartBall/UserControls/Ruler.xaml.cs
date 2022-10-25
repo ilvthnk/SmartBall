@@ -22,16 +22,23 @@ namespace SmartBall.UserControls
     /// </summary>
     public partial class Ruler : UserControl
     {
-        public int Size = 10;
 
+        public int ballPos = 0;
+        public StringBuilder Text = new StringBuilder("JSFALSFASJ");
+        Dictionary<object, int> textboxids = new Dictionary<object, int>();
+        public void setBallPos(int bpos)
+        {
+            Grid.SetRow(ball, bpos);
+        }
+        Label ball;
         public Ruler()
         {
             InitializeComponent();
-            for (int i = 0; i < Size; i++)            
+            for (int i = 0; i < Text.Length; i++)            
                 RulerArea.RowDefinitions.Add(new RowDefinition());
             //RulerArea.ShowGridLines = true;
 
-            for (int i = 0; i < Size; i++)
+            for (int i = 0; i < Text.Length; i++)
             {
                 Grid part = new Grid();
                 //part.ShowGridLines = true;
@@ -58,8 +65,10 @@ namespace SmartBall.UserControls
                 letterInput.VerticalAlignment = VerticalAlignment.Center;
                 letterInput.HorizontalContentAlignment = HorizontalAlignment.Center;
                 letterInput.MaxLength = 1;
-                letterInput.Text = "A";
+                letterInput.Text = Text[i].ToString();
                 letterInput.Width = 24;
+
+                textboxids.Add(letterInput, i);
 
                 Grid.SetColumn(letterInput, 2);
 
@@ -74,7 +83,7 @@ namespace SmartBall.UserControls
                 Orientation = Orientation.Vertical,
                 Value = 70,
                 Minimum = 1,
-                Maximum = this.Size,
+                Maximum = this.Text.Length,
                 TickFrequency = 1,
                 HorizontalAlignment = HorizontalAlignment.Center
                 //Style="{StaticResource MaterialDesignDiscreteSlider}"
@@ -83,7 +92,7 @@ namespace SmartBall.UserControls
             Grid.SetRow(slider, 5);
             Grid.SetRowSpan(slider, 5);
 
-            Label ball = new Label
+            ball = new Label
             {
                 Height = 24,
                 Width = 24,
@@ -102,7 +111,7 @@ namespace SmartBall.UserControls
 
             Grid.SetColumn(ball, 0);
 
-            Grid.SetRow(ball, 2);
+            setBallPos(ballPos);
 
             RulerArea.Children.Add(ball);
             RulerArea.Children.Add(slider);
