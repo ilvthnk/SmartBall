@@ -28,6 +28,7 @@ namespace SmartBall.UserControls
         Dictionary<object, int> textboxids = new Dictionary<object, int>();
         public void setBallPos(int bpos)
         {
+            ballPos = bpos;
             Grid.SetRow(ball, bpos);
         }
         Label ball;
