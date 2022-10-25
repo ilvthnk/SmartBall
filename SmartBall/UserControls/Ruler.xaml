@@ -5,5 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SmartBall.UserControls"
              mc:Ignorable="d">
-    <Grid x:Name="RulerArea"></Grid>
+    <Grid x:Name="RulerArea">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition x:Name="Removal" Width="*"/>
+        </Grid.ColumnDefinitions>
+    </Grid>
 </UserControl>

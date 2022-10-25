@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -26,20 +27,17 @@ namespace SmartBall.UserControls
         public Ruler()
         {
             InitializeComponent();
+            for (int i = 0; i < Size; i++)            
+                RulerArea.RowDefinitions.Add(new RowDefinition());
+            //RulerArea.ShowGridLines = true;
 
             for (int i = 0; i < Size; i++)
             {
-                RulerArea.RowDefinitions.Add(new RowDefinition());
-
                 Grid part = new Grid();
-
-                part.Margin = new Thickness(16, 0, 16, 0);
-
+                //part.ShowGridLines = true;
                 part.ColumnDefinitions.Add(new ColumnDefinition());
                 part.ColumnDefinitions.Add(new ColumnDefinition());
                 part.ColumnDefinitions.Add(new ColumnDefinition());
-
-                part.Margin = new Thickness(8, 0, 8, 0);
 
                 TextBlock number = new TextBlock();
 
@@ -56,7 +54,7 @@ namespace SmartBall.UserControls
 
                 MaterialDesignThemes.Wpf.TextFieldAssist.SetCharacterCounterVisibility(letterInput, Visibility.Hidden);
                 letterInput.FontSize = 16;
-                letterInput.HorizontalAlignment = HorizontalAlignment.Right;
+                letterInput.HorizontalAlignment = HorizontalAlignment.Center;
                 letterInput.VerticalAlignment = VerticalAlignment.Center;
                 letterInput.HorizontalContentAlignment = HorizontalAlignment.Center;
                 letterInput.MaxLength = 1;
@@ -68,16 +66,29 @@ namespace SmartBall.UserControls
                 part.Children.Add(letterInput);
 
                 Grid.SetRow(part, i);
-
+                Grid.SetColumn(part, 1);
                 RulerArea.Children.Add(part);
             }
+            Slider slider = new Slider
+            {
+                Orientation = Orientation.Vertical,
+                Value = 70,
+                Minimum = 1,
+                Maximum = this.Size,
+                TickFrequency = 1,
+                HorizontalAlignment = HorizontalAlignment.Center
+                //Style="{StaticResource MaterialDesignDiscreteSlider}"
+            };
+            Grid.SetColumn(slider, 2);
+            Grid.SetRow(slider, 5);
+            Grid.SetRowSpan(slider, 5);
 
             Label ball = new Label
             {
                 Height = 24,
                 Width = 24,
                 VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Left,
+                HorizontalAlignment = HorizontalAlignment.Center,
                 Background = Brushes.Red
             };
 
@@ -89,11 +100,15 @@ namespace SmartBall.UserControls
 
             ball.Resources.Add(ballStyle.TargetType, ballStyle);
 
-            Grid.SetColumn(ball, 2);
+            Grid.SetColumn(ball, 0);
 
             Grid.SetRow(ball, 2);
 
             RulerArea.Children.Add(ball);
+            RulerArea.Children.Add(slider);
+
+            //RulerArea.ColumnDefinitions.Remove(Removal);
+            //RulerArea.Children.Remove(slider);
         }
     }
 }
