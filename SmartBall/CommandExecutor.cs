@@ -87,7 +87,7 @@ namespace SmartBall
                             }
                             else
                             {
-                                throw new InvalidOperationException();
+                                throw new InvalidOperationException("Ожидается другая команда в позиции " + (tokenCursor + 1).ToString());
                             }
 
                             if (currentToken == TokenType.TokenDigit ||
@@ -105,7 +105,7 @@ namespace SmartBall
                             }
                             else
                             {
-                                throw new InvalidOperationException();
+                                throw new InvalidOperationException("Ожидается другой символ в позиции " + (tokenCursor + 1).ToString());
                             }
 
                             tokenCursor++;
@@ -124,7 +124,7 @@ namespace SmartBall
                                 currentToken = TokenType.TokenStar;
                             else
                             {
-                                throw new InvalidOperationException();
+                                throw new InvalidOperationException("Ожидается цифра в позиции " + (tokenCursor + 1).ToString());
                             }
 
                             tokenCursor++;
@@ -160,7 +160,7 @@ namespace SmartBall
                             tokenCursor = j;
 
                             if (dataCursor < 0 || dataCursor >= data.Length)
-                                throw new IndexOutOfRangeException();
+                                throw new IndexOutOfRangeException("Стою на месте");
 
                             currentToken = TokenType.TokenDigit;
 
@@ -168,14 +168,21 @@ namespace SmartBall
                         }
                     case '!':
                         {
+                            if (currentToken != TokenType.TokenDigit &&
+                                currentToken != TokenType.TokenStar &&
+                                currentToken != TokenType.TokenUndefined)
+                                throw new InvalidOperationException("Ожидается другой символ в позиции " + (tokenCursor + 1).ToString());
+
                             isStopped = true;
 
                             return;
                         }
                     default:
-                        throw new InvalidOperationException();
+                        throw new InvalidOperationException("Ожидается другой символ в позиции " + (tokenCursor + 1).ToString());
                 }
             }
+
+            isStopped = true;
         }
     }
 }

@@ -16,7 +16,9 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0" Margin="0 0 2 0">
-                <uc:Ruler x:Name="Ruletka"/>
+                <ScrollViewer>
+                    <uc:Ruler x:Name="Ruletka"/>
+                </ScrollViewer>
             </Grid>
 
             <Grid Grid.Column="1">
@@ -71,13 +73,14 @@
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0"
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                            IsEnabled="True"
                             Padding="4"
                             FontSize="18"
                             VerticalScrollBarVisibility="Auto"
                             HorizontalScrollBarVisibility="Auto"
                             AcceptsReturn="True"
-                             x:Name="EnterTextBox">
+                             x:Name="EnterTextBox"
+                             IsEnabled="False"
+                             >
                         Тут будет ввод команд
                     </TextBox>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
@@ -98,7 +101,9 @@
                             Padding="8 4 8 4"
                             Margin="0 1 0 0"
                             FontSize="14"
-                            Background="LightBlue">
+                            Background="LightBlue"
+                            Click="CheckButtonClicked"
+                            x:Name="CheckBtn">
                         <materialDesign:PackIcon Kind="Check" />
                     </Button>
                 </Grid>
@@ -110,13 +115,14 @@
                     </Grid.ColumnDefinitions>                    
                     <Button Style="{StaticResource MaterialDesignIconButton}"
                             ToolTip="MaterialDesignIconButton"
-                            IsEnabled="True"
+                            IsEnabled="False"
                             Grid.Column="1"
                             VerticalAlignment="Center"
                             Padding="8 4 8 4"
                             FontSize="14"
                             Background="LightBlue"
-                            Click="PlayButtonClicked">
+                            Click="PlayButtonClicked"
+                            x:Name="PlayBtn">
                         <materialDesign:PackIcon Kind="Play" />
                     </Button>
                     <TextBox Grid.Column="0"

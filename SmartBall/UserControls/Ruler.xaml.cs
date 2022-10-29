@@ -24,8 +24,8 @@ namespace SmartBall.UserControls
     {
 
         public int ballPos = 0;
-        public StringBuilder Text = new StringBuilder("JSFALSFASJ");
-        Dictionary<object, int> textboxids = new Dictionary<object, int>();
+        public StringBuilder Text = new StringBuilder("----------");
+        public Dictionary<object, int> textboxids = new Dictionary<object, int>();
         public void setBallPos(int bpos)
         {
             ballPos = bpos;
@@ -82,12 +82,12 @@ namespace SmartBall.UserControls
             Slider slider = new Slider
             {
                 Orientation = Orientation.Vertical,
-                Value = 70,
+                Value = ballPos,
                 Minimum = 1,
-                Maximum = this.Text.Length,
-                TickFrequency = 1,
-                HorizontalAlignment = HorizontalAlignment.Center
-                //Style="{StaticResource MaterialDesignDiscreteSlider}"
+                Maximum = Text.Length,
+                TickFrequency = 1.0,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                IsSnapToTickEnabled = true
             };
             Grid.SetColumn(slider, 2);
             Grid.SetRow(slider, 5);
