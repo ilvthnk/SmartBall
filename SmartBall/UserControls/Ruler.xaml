@@ -9,7 +9,17 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition x:Name="Removal" Width="*"/>
+            <ColumnDefinition x:Name="Removal" Width="1.5*"/>
         </Grid.ColumnDefinitions>
+        <Slider x:Name="slider"
+            Orientation = "Vertical"
+            Value = "10"
+            Minimum = "10"
+            Maximum = "20"
+            TickFrequency = "1.0"
+            HorizontalAlignment = "Center"
+            Style = "{StaticResource MaterialDesignDiscreteSlider}"
+            ValueChanged="SliderValueChanged"
+                />
     </Grid>
 </UserControl>

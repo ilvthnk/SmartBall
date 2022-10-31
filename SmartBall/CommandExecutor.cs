@@ -21,7 +21,7 @@ namespace SmartBall
     /// свойство IsStopped - флаг завершения работы исполнителя, изначально false (то есть еще не выполнил весь алгоритм)
     /// Выход за границы data порождает исключение, как и нераспознанные символы
     /// </summary>
-    class CommandExecutor
+    class CommandExecutor //научить работать с пустыми строками
     {
         private enum TokenType
         {
@@ -44,7 +44,7 @@ namespace SmartBall
         public string Result { get { return result; } }
 
         private int tokenCursor = 0;
-        private string data;
+        private Dictionary<int, object> data;
         private string tokens;
         private int dataCursor;
         public int DataCursor { get { return dataCursor; } }
@@ -55,7 +55,7 @@ namespace SmartBall
         private CommandType currentCommand = CommandType.CommandUndefined;
         private TokenType currentToken = TokenType.TokenUndefined;
 
-        public CommandExecutor(string data, string tokens, int dataCursor)
+        public CommandExecutor(Dictionary<int, object> data, string tokens, int dataCursor)
         {
             this.data = data;
             this.tokens = tokens;
@@ -114,7 +114,7 @@ namespace SmartBall
                         }
                     case '*':
                         {
-                            result += data[dataCursor];
+                            result += ((System.Windows.Controls.TextBox)data[dataCursor]).Text;
 
                             currentCommand = CommandType.CommandRead;
 
@@ -159,7 +159,7 @@ namespace SmartBall
 
                             tokenCursor = j;
 
-                            if (dataCursor < 0 || dataCursor >= data.Length)
+                            if (dataCursor < 0 || dataCursor >= data.Count)
                                 throw new IndexOutOfRangeException("Стою на месте");
 
                             currentToken = TokenType.TokenDigit;

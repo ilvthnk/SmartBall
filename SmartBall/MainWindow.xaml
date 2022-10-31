@@ -44,11 +44,14 @@
                         <TextBlock  Style="{StaticResource MaterialDesignHeadline6TextBlock}"
                                     Text="Задание" />
                     </materialDesign:Card>
-                    <TextBox Grid.Row="1"
+                    <TextBox x:Name="WordTextBox"
+                        Grid.Row="1"
                         AcceptsReturn="False"
-                        VerticalContentAlignment="Center"
+                        Background="White"
+                        VerticalContentAlignment="Bottom"
                         AcceptsTab="False"
                         FontSize="18"
+                        IsEnabled="False"
                         Padding="0">
                         Составьте слово
                     </TextBox>
@@ -78,8 +81,8 @@
                             VerticalScrollBarVisibility="Auto"
                             HorizontalScrollBarVisibility="Auto"
                             AcceptsReturn="True"
-                             x:Name="EnterTextBox"
-                             IsEnabled="False"
+                             x:Name="CodeTextBox"
+                             IsEnabled="True"
                              >
                         Тут будет ввод команд
                     </TextBox>
@@ -97,22 +100,43 @@
                     <Button Style="{StaticResource MaterialDesignIconButton}"
                             ToolTip="MaterialDesignIconButton"
                             IsEnabled="True"
-                            Grid.Column="1"                            
+                            Grid.Column="1"                     
+                            VerticalAlignment="Center"
                             Padding="8 4 8 4"
                             Margin="0 1 0 0"
                             FontSize="14"
                             Background="LightBlue"
                             Click="CheckButtonClicked"
                             x:Name="CheckBtn">
-                        <materialDesign:PackIcon Kind="Check" />
+                        <materialDesign:PackIcon x:Name="Icon" Kind="Check" />
                     </Button>
+                    <StackPanel x:Name="RBtns"
+                        Grid.Column="1"
+                        VerticalAlignment="Bottom"
+                        Orientation="Vertical"
+                        Margin="4">
+                        <RadioButton
+                            Style="{StaticResource MaterialDesignTabRadioButtonRight}"
+                            Margin="2"
+                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                            IsChecked="True"
+                            Content="Код" 
+                            Checked="RButtonChecked"/>
+                        <RadioButton
+                            Style="{StaticResource MaterialDesignTabRadioButtonRight}"
+                            Margin="2"
+                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                            IsChecked="False"
+                            Content="Слово" 
+                            Checked="RButtonChecked"/>
+                    </StackPanel>
                 </Grid>
 
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5*"/>
                         <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>                    
+                    </Grid.ColumnDefinitions>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
                             ToolTip="MaterialDesignIconButton"
                             IsEnabled="False"
@@ -130,6 +154,8 @@
                                FontSize="24"
                                FontWeight="Bold"
                                Foreground="#232323"
+                               IsEnabled="True"
+                               IsReadOnly="True"
                                x:Name="ResultTextBox">
                         Полученное слово будет тут
                     </TextBox>
