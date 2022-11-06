@@ -14,13 +14,9 @@
                 <ColumnDefinition Width="0.3*"/>
                 <ColumnDefinition Width="0.7*"/>
             </Grid.ColumnDefinitions>
-
             <Grid Grid.Column="0" Margin="0 0 2 0">
-                <ScrollViewer>
-                    <uc:Ruler x:Name="Ruletka"/>
-                </ScrollViewer>
+                <uc:Ruler x:Name="Ruler"/>
             </Grid>
-
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.2*"/>
@@ -45,14 +41,14 @@
                                     Text="Задание" />
                     </materialDesign:Card>
                     <TextBox x:Name="WordTextBox"
-                        Grid.Row="1"
-                        AcceptsReturn="False"
-                        Background="White"
-                        VerticalContentAlignment="Bottom"
-                        AcceptsTab="False"
-                        FontSize="18"
-                        IsEnabled="False"
-                        Padding="0">
+                             Grid.Row="1"
+                             AcceptsReturn="False"
+                             Background="White"
+                             VerticalContentAlignment="Bottom"
+                             AcceptsTab="False"
+                             FontSize="18"
+                             IsEnabled="True"
+                             Padding="0">
                         Составьте слово
                     </TextBox>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
@@ -68,22 +64,20 @@
                         <materialDesign:PackIcon Kind="Help" />
                     </Button>
                 </Grid>
-
                 <Grid Grid.Row="1" Margin="0 4 0 2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0"
-                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                            Padding="4"
-                            FontSize="18"
-                            VerticalScrollBarVisibility="Auto"
-                            HorizontalScrollBarVisibility="Auto"
-                            AcceptsReturn="True"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Padding="4"
+                             FontSize="18"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Auto"
+                             AcceptsReturn="True"
                              x:Name="CodeTextBox"
-                             IsEnabled="True"
-                             >
+                             IsEnabled="False">
                         Тут будет ввод команд
                     </TextBox>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
@@ -94,7 +88,8 @@
                             Padding="8 4 8 4"
                             Margin="0 1 0 0"
                             FontSize="14"
-                            Background="LightBlue">
+                            Background="LightBlue"
+                            x:Name="FileImportBtn">
                         <materialDesign:PackIcon Kind="FileImport" />
                     </Button>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
@@ -108,7 +103,7 @@
                             Background="LightBlue"
                             Click="CheckButtonClicked"
                             x:Name="CheckBtn">
-                        <materialDesign:PackIcon x:Name="Icon" Kind="Check" />
+                        <materialDesign:PackIcon x:Name="ApplyBtn" Kind="Check" />
                     </Button>
                     <StackPanel x:Name="RBtns"
                         Grid.Column="1"
@@ -120,18 +115,18 @@
                             Margin="2"
                             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             IsChecked="True"
-                            Content="Код" 
-                            Checked="RButtonChecked"/>
+                            Content="Код"
+                            Click="RBtnCodeClicked"
+                            x:Name="CheckCodeBth"/>
                         <RadioButton
                             Style="{StaticResource MaterialDesignTabRadioButtonRight}"
                             Margin="2"
                             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             IsChecked="False"
-                            Content="Слово" 
-                            Checked="RButtonChecked"/>
+                            Content="Слово"
+                            Click="RBtnGuessClicked"/>
                     </StackPanel>
                 </Grid>
-
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5*"/>
@@ -150,13 +145,13 @@
                         <materialDesign:PackIcon Kind="Play" />
                     </Button>
                     <TextBox Grid.Column="0"
-                               VerticalAlignment="Center"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               Foreground="#232323"
-                               IsEnabled="True"
-                               IsReadOnly="True"
-                               x:Name="ResultTextBox">
+                             VerticalAlignment="Center"
+                             FontSize="24"
+                             FontWeight="Bold"
+                             Foreground="#232323"
+                             IsEnabled="True"
+                             IsReadOnly="True"
+                             x:Name="ResultTextBox">
                         Полученное слово будет тут
                     </TextBox>
                 </Grid>

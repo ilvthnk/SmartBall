@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="SmartBall.UserControls.RulerDelimeter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SmartBall.UserControls"
+             mc:Ignorable="d">
+    <Grid Height="64" Margin="0 2 0 2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="0.4*"/>
+            <ColumnDefinition Width="0.3*"/>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="Ball"
+               Height="24"
+               Width="24"
+               Grid.Column="0">
+            <Label.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="24"></Setter>
+                </Style>
+            </Label.Resources>
+        </Label>
+        <Label x:Name="Number"
+               Grid.Column="1"/>
+        <TextBox Grid.Column="2"
+                 MaxLength="1"
+                 Width="24"
+                 Height="36"
+                 FontSize="20"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 x:Name="TBox"/>
+    </Grid>
+</UserControl>

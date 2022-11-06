@@ -7,19 +7,22 @@
              mc:Ignorable="d">
     <Grid x:Name="RulerArea">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition x:Name="Removal" Width="1.5*"/>
+            <ColumnDefinition Width="0.75*"/>
+            <ColumnDefinition x:Name="Removal" Width="0.25*"/>
         </Grid.ColumnDefinitions>
-        <Slider x:Name="slider"
-            Orientation = "Vertical"
-            Value = "10"
-            Minimum = "10"
-            Maximum = "20"
-            TickFrequency = "1.0"
-            HorizontalAlignment = "Center"
-            Style = "{StaticResource MaterialDesignDiscreteSlider}"
-            ValueChanged="SliderValueChanged"
-                />
+        <ScrollViewer Grid.Column="0">
+            <DockPanel LastChildFill="False" x:Name="TextBoxArea"/>
+        </ScrollViewer>
+        <Slider Grid.Column="1"
+                x:Name="Slider"
+                Orientation="Vertical"
+                Value="10"
+                Minimum="10"
+                Maximum="20"
+                TickFrequency="1.0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch"
+                Style="{StaticResource MaterialDesignDiscreteSlider}"
+                ValueChanged="SliderValueChanged"/>
     </Grid>
 </UserControl>

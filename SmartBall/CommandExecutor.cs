@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SmartBall.UserControls;
+
 namespace SmartBall
 {
     /// <summary>
@@ -44,7 +46,7 @@ namespace SmartBall
         public string Result { get { return result; } }
 
         private int tokenCursor = 0;
-        private Dictionary<int, object> data;
+        private Dictionary<int, RulerDelimeter> data;
         private string tokens;
         private int dataCursor;
         public int DataCursor { get { return dataCursor; } }
@@ -55,7 +57,7 @@ namespace SmartBall
         private CommandType currentCommand = CommandType.CommandUndefined;
         private TokenType currentToken = TokenType.TokenUndefined;
 
-        public CommandExecutor(Dictionary<int, object> data, string tokens, int dataCursor)
+        public CommandExecutor(Dictionary<int, RulerDelimeter> data, string tokens, int dataCursor)
         {
             this.data = data;
             this.tokens = tokens;
@@ -114,7 +116,7 @@ namespace SmartBall
                         }
                     case '*':
                         {
-                            result += ((System.Windows.Controls.TextBox)data[dataCursor]).Text;
+                            result += data[dataCursor].TBox.Text;
 
                             currentCommand = CommandType.CommandRead;
 
