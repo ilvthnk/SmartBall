@@ -90,7 +90,7 @@
                             FontSize="14"
                             Background="LightBlue"
                             x:Name="FileImportBtn"
-                            Click="FileImportButtonClicked"Мелки>
+                            Click="FileImportButtonClicked">
                         <materialDesign:PackIcon Kind="FileImport" />
                     </Button>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
