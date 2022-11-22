@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -56,6 +57,8 @@ namespace SmartBall
 
             Ruler.RulerArea.Children.Add(Ruler.Slider);
 
+            FileImportBtn.IsEnabled = false;
+
             Ruler.RulerArea.ColumnDefinitions.Add(Ruler.Removal);
         }
 
@@ -66,6 +69,8 @@ namespace SmartBall
             WordTextBox.Foreground = Brushes.Black;
 
             ResultTextBox.Foreground = Brushes.Black;
+
+            FileImportBtn.IsEnabled = false;
 
             // Ошибки режима кода
             if (WordTextBox.Text == String.Empty)
@@ -139,7 +144,7 @@ namespace SmartBall
 
             RBtns.Visibility = Visibility.Visible;
 
-            FileImportBtn.IsEnabled = true;
+            FileImportBtn.IsEnabled = false;
 
             Ruler.RulerArea.Children.Add(Ruler.Slider);
 
@@ -150,6 +155,30 @@ namespace SmartBall
         {
             Mode = AppMode.ModeGuess;
 
+            foreach (var pair in Ruler.RulerDelimeters)
+                ((RulerDelimeter)pair.Value).TBox.IsEnabled = false;
+
+            WordTextBox.IsEnabled = false;
+
+            CodeTextBox.IsEnabled = false;
+
+            ResultTextBox.IsReadOnly = false;
+
+            PlayBtn.IsEnabled = false;
+
+            FileImportBtn.IsEnabled = true;
+
+            ApplyBtn.Kind = PackIconKind.CancelOutline;
+
+            RBtns.Visibility = Visibility.Hidden;
+
+            Ruler.RulerArea.Children.Remove(Ruler.Slider);
+
+            Ruler.RulerArea.ColumnDefinitions.Remove(Ruler.Removal);
+        }
+
+        private void FileImportButtonClicked(object sender, RoutedEventArgs args)
+        {
             try
             {
                 var dialog = new Microsoft.Win32.OpenFileDialog();
@@ -187,34 +216,13 @@ namespace SmartBall
                         Ruler.Text.Append(task.RulerData[i]);
                     }
                 }
-           }
-            catch(Exception e)
+
+                PlayBtn.IsEnabled = true;
+            }
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-
-                CancelGuessMode();
             }
-
-            foreach (var pair in Ruler.RulerDelimeters)
-                ((RulerDelimeter)pair.Value).TBox.IsEnabled = false;
-
-            WordTextBox.IsEnabled = false;
-
-            CodeTextBox.IsEnabled = false;
-
-            ResultTextBox.IsReadOnly = false;
-
-            PlayBtn.IsEnabled = true;
-
-            FileImportBtn.IsEnabled = false;
-
-            ApplyBtn.Kind = PackIconKind.CancelOutline;
-
-            RBtns.Visibility = Visibility.Hidden;
-
-            Ruler.RulerArea.Children.Remove(Ruler.Slider);
-
-            Ruler.RulerArea.ColumnDefinitions.Remove(Ruler.Removal);
         }
 
         private void PlayButtonClicked(object sender, RoutedEventArgs args)

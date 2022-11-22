@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MaterialDesignThemes.Wpf;
+using System.Threading;
 
 namespace SmartBall.UserControls
 {
@@ -34,7 +35,7 @@ namespace SmartBall.UserControls
             RulerDelimeters[BallPos].Ball.Background = Brushes.White;
 
             BallPos = bpos;
-
+ 
             RulerDelimeters[BallPos].Ball.Background = Brushes.Red;
         }
 

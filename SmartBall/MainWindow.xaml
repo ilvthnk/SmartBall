@@ -82,14 +82,15 @@
                     </TextBox>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
                             ToolTip="MaterialDesignIconButton"
-                            IsEnabled="True"
+                            IsEnabled="False"
                             Grid.Column="1"
                             VerticalAlignment="Top"
                             Padding="8 4 8 4"
                             Margin="0 1 0 0"
                             FontSize="14"
                             Background="LightBlue"
-                            x:Name="FileImportBtn">
+                            x:Name="FileImportBtn"
+                            Click="FileImportButtonClicked"Мелки>
                         <materialDesign:PackIcon Kind="FileImport" />
                     </Button>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
