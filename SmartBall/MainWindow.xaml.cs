@@ -202,7 +202,7 @@ namespace SmartBall
             }
 
             foreach (var pair in Ruler.RulerDelimeters)
-                ((RulerDelimeter)pair.Value).TBox.IsReadOnly = false;
+                ((RulerDelimeter)pair.Value).TBox.IsReadOnly = true;
 
             PlayBtn.IsEnabled = true;
 
@@ -238,7 +238,7 @@ namespace SmartBall
                 CodeTextBox.IsReadOnly = false;
             }
             foreach (var pair in Ruler.RulerDelimeters)
-                ((RulerDelimeter)pair.Value).TBox.IsReadOnly = true;
+                ((RulerDelimeter)pair.Value).TBox.IsReadOnly = false;
 
             WordTextBox.IsEnabled = true;
 
