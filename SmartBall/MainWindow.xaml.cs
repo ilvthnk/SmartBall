@@ -40,143 +40,6 @@ namespace SmartBall
             InitializeComponent();
         }
 
-        private void CancelCodeMode()
-        {
-            foreach (var pair in Ruler.RulerDelimeters)
-                ((RulerDelimeter)pair.Value).TBox.IsEnabled = true;
-
-            WordTextBox.IsEnabled = true;
-
-            CodeTextBox.IsEnabled = false;
-
-            PlayBtn.IsEnabled = false;
-
-            ApplyBtn.Kind = PackIconKind.Check;
-
-            RBtns.Visibility = Visibility.Visible;
-
-            Ruler.RulerArea.Children.Add(Ruler.Slider);
-
-            FileImportBtn.IsEnabled = false;
-
-            Ruler.RulerArea.ColumnDefinitions.Add(Ruler.Removal);
-        }
-
-        private void ApplyCodeMode()
-        {
-            Mode = AppMode.ModeCode;
-
-            WordTextBox.Foreground = Brushes.Black;
-
-            ResultTextBox.Foreground = Brushes.Black;
-
-            FileImportBtn.IsEnabled = false;
-
-            // Ошибки режима кода
-            if (WordTextBox.Text == String.Empty)
-            {
-                WordTextBox.Background = Brushes.PaleVioletRed;
-
-                return;
-            }
-
-            Ruler.Text = new StringBuilder(String.Empty, 20);
-
-            foreach (var pair in Ruler.RulerDelimeters)
-            {
-                // Все поля должны быть заполнены
-                if (((RulerDelimeter)pair.Value).TBox.Text == String.Empty)
-                {
-                    ResultTextBox.Text = "Заполните линейку";
-
-                    return;
-                }
-                else
-                {
-                    Ruler.Text.Append(((RulerDelimeter)pair.Value).TBox.Text[0]);
-                }
-            }
-
-            foreach (var letter in WordTextBox.Text)
-            {
-                if (!(Ruler.Text.ToString().Contains(letter)))
-                {
-                    WordTextBox.Foreground = Brushes.PaleVioletRed;
-
-                    return;
-                }
-            }
-
-            foreach (var pair in Ruler.RulerDelimeters)
-                ((RulerDelimeter)pair.Value).TBox.IsEnabled = false;
-
-            WordTextBox.IsEnabled = false;
-
-            CodeTextBox.IsEnabled = true;
-
-            PlayBtn.IsEnabled = true;
-
-            ApplyBtn.Kind = PackIconKind.CancelOutline;
-
-            RBtns.Visibility = Visibility.Hidden;
-
-            Ruler.RulerArea.Children.Remove(Ruler.Slider);
-
-            Ruler.RulerArea.ColumnDefinitions.Remove(Ruler.Removal);
-        }
-
-        private void CancelGuessMode()
-        {
-            Mode = AppMode.ModeCode;
-
-            CheckCodeBth.IsChecked = true;
-
-            foreach (var pair in Ruler.RulerDelimeters)
-                ((RulerDelimeter)pair.Value).TBox.IsEnabled = true;
-
-            WordTextBox.IsEnabled = true;
-
-            ResultTextBox.IsReadOnly = true;
-
-            PlayBtn.IsEnabled = false;
-
-            ApplyBtn.Kind = PackIconKind.Check;
-
-            RBtns.Visibility = Visibility.Visible;
-
-            FileImportBtn.IsEnabled = false;
-
-            Ruler.RulerArea.Children.Add(Ruler.Slider);
-
-            Ruler.RulerArea.ColumnDefinitions.Add(Ruler.Removal);
-        }
-
-        private void ApplyGuessMode()
-        {
-            Mode = AppMode.ModeGuess;
-
-            foreach (var pair in Ruler.RulerDelimeters)
-                ((RulerDelimeter)pair.Value).TBox.IsEnabled = false;
-
-            WordTextBox.IsEnabled = false;
-
-            CodeTextBox.IsEnabled = false;
-
-            ResultTextBox.IsReadOnly = false;
-
-            PlayBtn.IsEnabled = false;
-
-            FileImportBtn.IsEnabled = true;
-
-            ApplyBtn.Kind = PackIconKind.CancelOutline;
-
-            RBtns.Visibility = Visibility.Hidden;
-
-            Ruler.RulerArea.Children.Remove(Ruler.Slider);
-
-            Ruler.RulerArea.ColumnDefinitions.Remove(Ruler.Removal);
-        }
-
         private void FileImportButtonClicked(object sender, RoutedEventArgs args)
         {
             try
@@ -262,25 +125,136 @@ namespace SmartBall
         private void RBtnCodeClicked(object sender, RoutedEventArgs args)
         {
             if (Mode != AppMode.ModeCode)
-                ApplyCodeMode();
+            {
+                Mode = AppMode.ModeCode;
+
+                WordTextBox.IsEnabled = true;
+                WordTextBox.IsReadOnly = false;
+
+                CodeTextBox.IsEnabled = false;
+                CodeTextBox.IsReadOnly = true;
+            }
         }
 
         private void RBtnGuessClicked(object sender, RoutedEventArgs args)
         {
             if (Mode != AppMode.ModeGuess)
-                ApplyGuessMode();
+            {
+                Mode = AppMode.ModeGuess;
+
+                WordTextBox.IsEnabled = false;
+                WordTextBox.IsReadOnly = true;
+
+                CodeTextBox.IsEnabled = true;
+                CodeTextBox.IsReadOnly = false;
+            }
         }
 
         private void CheckButtonClicked(object sender, RoutedEventArgs args)
         {
-            if (ApplyBtn.Kind == PackIconKind.Check && Mode == AppMode.ModeCode)
-                ApplyCodeMode();
-            else if (ApplyBtn.Kind == PackIconKind.Check && Mode == AppMode.ModeGuess)
-                ApplyGuessMode();
-            else if (ApplyBtn.Kind == PackIconKind.CancelOutline && Mode == AppMode.ModeCode)
-                CancelCodeMode();
-            else if (ApplyBtn.Kind == PackIconKind.CancelOutline && Mode == AppMode.ModeGuess)
-                CancelGuessMode();
+            if (ApplyBtn.Kind == PackIconKind.Check)
+                Apply();
+            else if (ApplyBtn.Kind == PackIconKind.CancelOutline)
+                Cancel();
+        }
+        private void Apply()
+        {
+            Ruler.Text = new StringBuilder(String.Empty, 20);
+
+            foreach (var pair in Ruler.RulerDelimeters)
+            {
+                // Все поля должны быть заполнены // Разве? - bleidd
+                if (((RulerDelimeter)pair.Value).TBox.Text == String.Empty)
+                {
+                    ResultTextBox.Text = "Заполните линейку";
+
+                    return;
+                }
+                else
+                {
+                    Ruler.Text.Append(((RulerDelimeter)pair.Value).TBox.Text[0]);
+                }
+            }
+
+            if (Mode == AppMode.ModeCode)
+            {
+                foreach (var letter in WordTextBox.Text)
+                {
+                    if (!(Ruler.Text.ToString().Contains(letter)))
+                    {
+                        WordTextBox.Foreground = Brushes.PaleVioletRed;
+
+                        return;
+                    }
+                }
+
+                WordTextBox.IsReadOnly = true;
+
+                CodeTextBox.IsReadOnly = false;
+            }
+            else 
+            {
+                if (CodeTextBox.Text == String.Empty)
+                    return;
+                WordTextBox.IsReadOnly = false;
+
+                CodeTextBox.IsReadOnly = true;
+            }
+
+            foreach (var pair in Ruler.RulerDelimeters)
+                ((RulerDelimeter)pair.Value).TBox.IsReadOnly = false;
+
+            PlayBtn.IsEnabled = true;
+
+            WordTextBox.IsEnabled = true;
+
+            CodeTextBox.IsEnabled = true;
+
+            ApplyBtn.Kind = PackIconKind.CancelOutline;
+
+            RBtns.Visibility = Visibility.Hidden;
+
+            Ruler.RulerArea.Children.Remove(Ruler.Slider);
+
+            Ruler.RulerArea.ColumnDefinitions.Remove(Ruler.Removal);
+        }
+        private void Cancel()
+        {
+
+            if (Mode == AppMode.ModeCode)
+            {
+                WordTextBox.IsEnabled = true;
+                WordTextBox.IsReadOnly = false;
+
+                CodeTextBox.IsEnabled = false;
+                CodeTextBox.IsReadOnly = true;
+            }
+            else
+            {
+                WordTextBox.IsEnabled = false;
+                WordTextBox.IsReadOnly = true;
+
+                CodeTextBox.IsEnabled = true;
+                CodeTextBox.IsReadOnly = false;
+            }
+            foreach (var pair in Ruler.RulerDelimeters)
+                ((RulerDelimeter)pair.Value).TBox.IsReadOnly = true;
+
+            WordTextBox.IsEnabled = true;
+
+            ResultTextBox.IsReadOnly = true;
+
+            PlayBtn.IsEnabled = false;
+
+            ApplyBtn.Kind = PackIconKind.Check;
+
+            RBtns.Visibility = Visibility.Visible;
+
+            FileImportBtn.IsEnabled = false;
+
+            Ruler.RulerArea.Children.Add(Ruler.Slider);
+
+            Ruler.RulerArea.ColumnDefinitions.Add(Ruler.Removal);
         }
     }
 }
