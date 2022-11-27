@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MaterialDesignThemes.Wpf;
 using System.Threading;
+using System.Windows.Media.Animation;
 
 namespace SmartBall.UserControls
 {
@@ -32,11 +33,30 @@ namespace SmartBall.UserControls
 
         public void SetBallPos(int bpos)
         {
-            RulerDelimeters[BallPos].Ball.Background = Brushes.White;
-
+            BallAnimation(BallPos, bpos);
+            
             BallPos = bpos;
- 
-            RulerDelimeters[BallPos].Ball.Background = Brushes.Red;
+        }
+
+        private void BallAnimation(int currPos, int nPos)
+        {
+            ColorAnimation ballDisappear = new ColorAnimation
+            {
+                From = Colors.Red,
+                To = Colors.White,
+                Duration = new Duration(TimeSpan.FromSeconds(2)),
+                DecelerationRatio = 1.0
+            };
+            ColorAnimation ballAppear = new ColorAnimation
+            {
+                From = Colors.White,
+                To = Colors.Red,
+                Duration = new Duration(TimeSpan.FromSeconds(1))
+            };
+            RulerDelimeters[currPos].Ball.Background = new SolidColorBrush();
+            RulerDelimeters[nPos].Ball.Background = new SolidColorBrush();
+            RulerDelimeters[currPos].Ball.Background.BeginAnimation(SolidColorBrush.ColorProperty, ballDisappear);
+            RulerDelimeters[nPos].Ball.Background.BeginAnimation(SolidColorBrush.ColorProperty, ballAppear);
         }
 
         public void AppendDelimeter()
@@ -61,12 +81,13 @@ namespace SmartBall.UserControls
             TextBoxArea.Children.Remove(rd);
 
             RulerDelimeters.Remove(Size);
+
         }
 
         public Ruler()
         {
             InitializeComponent();
-
+            RulerArea.ShowGridLines = true;
             SetBallPos(0);
         }
 

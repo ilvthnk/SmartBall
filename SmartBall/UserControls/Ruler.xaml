@@ -10,7 +10,7 @@
             <ColumnDefinition Width="0.75*"/>
             <ColumnDefinition x:Name="Removal" Width="0.25*"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="0">
+        <ScrollViewer x:Name="ScrollArea" Grid.Column="0">
             <DockPanel LastChildFill="False" x:Name="TextBoxArea"/>
         </ScrollViewer>
         <Slider Grid.Column="1"
@@ -19,6 +19,7 @@
                 Value="10"
                 Minimum="10"
                 Maximum="20"
+                Margin="0 20 0 20"
                 TickFrequency="1.0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Stretch"
