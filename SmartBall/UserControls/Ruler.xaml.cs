@@ -1,20 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MaterialDesignThemes.Wpf;
-using System.Threading;
 using System.Windows.Media.Animation;
 
 namespace SmartBall.UserControls
@@ -27,7 +16,7 @@ namespace SmartBall.UserControls
         public int Size = 0;
         public int BallPos = 0;
 
-        public StringBuilder Text = new StringBuilder(String.Empty, 20);
+        public StringBuilder Text = new StringBuilder(string.Empty, 20);
 
         public Dictionary<int, RulerDelimeter> RulerDelimeters = new Dictionary<int, RulerDelimeter>();
 
@@ -47,12 +36,14 @@ namespace SmartBall.UserControls
                 Duration = new Duration(TimeSpan.FromSeconds(2)),
                 DecelerationRatio = 1.0
             };
+
             ColorAnimation ballAppear = new ColorAnimation
             {
                 From = Colors.White,
                 To = Colors.Red,
                 Duration = new Duration(TimeSpan.FromSeconds(1))
             };
+
             RulerDelimeters[currPos].Ball.Background = new SolidColorBrush();
             RulerDelimeters[nPos].Ball.Background = new SolidColorBrush();
             RulerDelimeters[currPos].Ball.Background.BeginAnimation(SolidColorBrush.ColorProperty, ballDisappear);
@@ -87,7 +78,7 @@ namespace SmartBall.UserControls
         public Ruler()
         {
             InitializeComponent();
-            RulerArea.ShowGridLines = true;
+
             SetBallPos(0);
         }
 
@@ -101,7 +92,7 @@ namespace SmartBall.UserControls
                 for (int i = 0; i < nVal - oVal; i++)
                     AppendDelimeter();
             }
-            else if (nVal < oVal && nVal >= 10)
+            else if (nVal < oVal && nVal >= 4)
             {
                 for (int i = 0; i < oVal - nVal; i++)
                     RemoveLast();

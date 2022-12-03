@@ -3,18 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SmartBall"
         xmlns:uc="clr-namespace:SmartBall.UserControls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Умный шарик" Height="480" Width="800" ResizeMode="CanMinimize">
+        Title="" Height="648" Width="1024">
     <Grid>
         <Grid Margin="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.3*"/>
                 <ColumnDefinition Width="0.7*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Margin="0 0 2 0">
+            <Grid Grid.Column="0" Margin="0 0 32 0">
                 <uc:Ruler x:Name="Ruler"/>
             </Grid>
             <Grid Grid.Column="1">
@@ -29,8 +28,8 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="0.6*"/>
+                        <RowDefinition Height="0.4*"/>
                     </Grid.RowDefinitions>
                     <materialDesign:Card Grid.Row="0"
                                          Background="LightBlue"
@@ -38,7 +37,9 @@
                                          Padding="6"
                                          Margin="0 0 0 4">
                         <TextBlock  Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                                    Text="Задание" />
+                                    Text="Мое задание"
+                                    FontSize="24"
+                                    VerticalAlignment="Center"/>
                     </materialDesign:Card>
                     <TextBox x:Name="WordTextBox"
                              Grid.Row="1"
@@ -46,10 +47,10 @@
                              Background="White"
                              VerticalContentAlignment="Bottom"
                              AcceptsTab="False"
-                             FontSize="18"
+                             FontSize="24"
                              IsEnabled="True"
                              Padding="0">
-                        Составьте слово
+                        Составить слово
                     </TextBox>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
                             ToolTip="MaterialDesignIconButton"
@@ -78,11 +79,10 @@
                              AcceptsReturn="True"
                              x:Name="CodeTextBox"
                              IsEnabled="False">
-                        Тут будет ввод команд
                     </TextBox>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
                             ToolTip="MaterialDesignIconButton"
-                            IsEnabled="False"
+                            IsEnabled="True"
                             Grid.Column="1"
                             VerticalAlignment="Top"
                             Padding="8 4 8 4"
@@ -116,15 +116,18 @@
                             Margin="2"
                             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             IsChecked="True"
+                            FontWeight="Bold"
                             Content="Код"
                             Click="RBtnCodeClicked"
-                            x:Name="CheckCodeBth"/>
+                            x:Name="CheckCodeBtn"/>
                         <RadioButton
                             Style="{StaticResource MaterialDesignTabRadioButtonRight}"
                             Margin="2"
                             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             IsChecked="False"
                             Content="Слово"
+                            FontWeight="Bold"
+                            x:Name="CheckGuessBtn"
                             Click="RBtnGuessClicked"/>
                     </StackPanel>
                 </Grid>
@@ -150,10 +153,8 @@
                              FontSize="24"
                              FontWeight="Bold"
                              Foreground="#232323"
-                             IsEnabled="True"
                              IsReadOnly="True"
                              x:Name="ResultTextBox">
-                        Полученное слово будет тут
                     </TextBox>
                 </Grid>
             </Grid>

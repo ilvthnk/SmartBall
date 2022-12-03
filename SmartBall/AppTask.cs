@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmartBall
+﻿namespace SmartBall
 {
     class DemoAppTask
     {
-        public string Task { get; set; }
-        public int BallPos { get; set; }
-        public string Code { get; set; }
-        public string RulerData { get; set; }
-        public string Answer { get; set; }
+        public string? Task      { get; set; }
+        public int BallPos       { get; set; }
+        public string? Code      { get; set; } // Если пусто, то текущий режим - "код"
+        public string? RulerData { get; set; } // 1 и более символов, не считая пробельные
+        public string? Answer    { get; set; } // Только для режима "слово"
     }
 }
