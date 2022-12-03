@@ -49,7 +49,8 @@
                              AcceptsTab="False"
                              FontSize="24"
                              IsEnabled="True"
-                             Padding="0">
+                             Padding="0"
+                             IsReadOnly="False">
                         Составить слово
                     </TextBox>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
