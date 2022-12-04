@@ -22,6 +22,7 @@ namespace SmartBall.UserControls
 
         public void SetBallPos(int bpos)
         {
+
             BallAnimation(BallPos, bpos);
             
             BallPos = bpos;

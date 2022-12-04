@@ -62,6 +62,9 @@ namespace SmartBall
                     if (task.BallPos < 0 || task.BallPos >= task.RulerData.Length)
                         task.BallPos = 0;
 
+                    if (Ruler.BallPos >= task.RulerData.Length)
+                        Ruler.BallPos = task.RulerData.Length - 1;
+
                     Ruler.SetBallPos(task.BallPos);
 
                     for (int i = 0; i < task.RulerData.Length; i++)
