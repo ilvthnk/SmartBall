@@ -75,53 +75,47 @@ namespace SmartBall
                     }
 
                     WordTextBox.Text = task.Task;
+                    WordTextBox.IsReadOnly = true;
 
                     ResultTextBox.Foreground = Brushes.Black;
+
+                    foreach (var pair in Ruler.RulerDelimeters)
+                    {
+                        (pair.Value).TBox.IsReadOnly = true;
+                    }
+
+                    Ruler.RulerArea.Children.Remove(Ruler.Slider);
+
+                    Ruler.RulerArea.ColumnDefinitions.Remove(Ruler.Removal);
+
+                    ApplyBtn.Kind = PackIconKind.CancelOutline;
+
+                    PlayBtn.IsEnabled = true;
+
+                    RBtns.Visibility = Visibility.Hidden;
 
                     if (task.Code == string.Empty)
                     {
                         Mode = AppMode.ModeCode;
 
-                        WordTextBox.IsReadOnly = false;
+                        ResultTextBox.Text = "";
 
                         ResultTextBox.IsReadOnly = true;
 
-                        PlayBtn.IsEnabled = false;
-
-                        CodeTextBox.IsEnabled = false;
-
-                        ApplyBtn.Kind = PackIconKind.Check;
+                        CodeTextBox.IsEnabled = true;
 
                         CheckCodeBtn.IsChecked = true;
                     }
                     else
                     {
                         Mode = AppMode.ModeGuess;
-                        Mode = AppMode.ModeGuess;
-
-                        WordTextBox.IsReadOnly = true;
 
                         ResultTextBox.IsReadOnly = false;
-
-                        PlayBtn.IsEnabled = true;
-
-                        ApplyBtn.Kind = PackIconKind.CancelOutline;
-
-                        RBtns.Visibility = Visibility.Hidden;
 
                         CodeTextBox.IsEnabled = false;
                         CodeTextBox.Text = task.Code;
 
                         CheckGuessBtn.IsChecked = true;
-
-                        foreach (var pair in Ruler.RulerDelimeters)
-                        {
-                            (pair.Value).TBox.IsReadOnly = true;
-                        }
-
-                        Ruler.RulerArea.Children.Remove(Ruler.Slider);
-
-                        Ruler.RulerArea.ColumnDefinitions.Remove(Ruler.Removal);
                     }
                 }
             }
