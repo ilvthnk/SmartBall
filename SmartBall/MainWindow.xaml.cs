@@ -20,7 +20,7 @@ namespace SmartBall
             ModeGuess
         }
 
-        DemoAppTask? task = null;
+        private string RightAnswer = ""; // Для режима "слово"
 
         private AppMode Mode = AppMode.ModeCode; // По умолчанию
 
@@ -38,21 +38,28 @@ namespace SmartBall
 
                 bool? result = dialog.ShowDialog();
 
+                DemoAppTask task = new DemoAppTask();
+
                 if (result == true)
                 {
                     string fileName = dialog.FileName;
 
                     task = JsonSerializer.Deserialize<DemoAppTask>(File.ReadAllText(fileName));
 
-                    if (task == null) throw new Exception("Ошибка чтения файла!");
+                    if (task == null)
+                        throw new Exception("Ошибка чтения файла!");
 
                     if (task.RulerData == null)
-                        if (task.RulerData.Length < 4 || task.RulerData.Length > 20)
-                            throw new Exception("На линейке должно быть менее 21 и более 3 символов!");
+                        throw new Exception("Линейка должна быть заполнена!");
+
+                    task.RulerData = task.RulerData.Trim().Replace("\r\n", string.Empty).Replace(" ", string.Empty);
+
+                    if (task.RulerData.Length < 4 || task.RulerData.Length > 20)
+                        throw new Exception("На линейке должно быть от 4 и до 20 символов!");
 
                     Ruler.Slider.Value = task.RulerData.Length;
 
-                    if (task.BallPos < 4 || task.BallPos >= task.RulerData.Length)
+                    if (task.BallPos < 0 || task.BallPos >= task.RulerData.Length)
                         task.BallPos = 0;
 
                     Ruler.SetBallPos(task.BallPos);
@@ -83,13 +90,10 @@ namespace SmartBall
                         ApplyBtn.Kind = PackIconKind.Check;
 
                         CheckCodeBtn.IsChecked = true;
-
-                        Ruler.RulerArea.Children.Add(Ruler.Slider);
-
-                        Ruler.RulerArea.ColumnDefinitions.Add(Ruler.Removal);
                     }
                     else
                     {
+                        Mode = AppMode.ModeGuess;
                         Mode = AppMode.ModeGuess;
 
                         WordTextBox.IsReadOnly = true;
@@ -131,7 +135,11 @@ namespace SmartBall
 
             try
             {
+                string UserAnswer = ResultTextBox.Text;
+
                 int SavedBallPos = Ruler.BallPos;
+
+                if (CodeTextBox.Text == String.Empty) throw new Exception("Введи алгоритм!");
 
                 while (!cmdex.IsStopped)
                 {
@@ -140,6 +148,8 @@ namespace SmartBall
                     Ruler.SetBallPos(cmdex.DataCursor);
                 }
 
+                RightAnswer = cmdex.Result;
+
                 if (Mode == AppMode.ModeCode)
                 {
                     ResultTextBox.Text = cmdex.Result;
@@ -147,7 +157,7 @@ namespace SmartBall
 
                 if (Mode == AppMode.ModeGuess)
                 {
-                    if (task.Answer == cmdex.Result)
+                    if (UserAnswer == RightAnswer)
                     {
                         ResultTextBox.Foreground = Brushes.LawnGreen;
                     }
@@ -219,17 +229,9 @@ namespace SmartBall
         // Применение изменений
         private void Apply()
         {
-            ResultTextBox.Foreground = Brushes.Black;
-
-            RBtns.Visibility = Visibility.Hidden;
-
-            WordTextBox.IsReadOnly = true;
-
             /*
              * В обоих режимах линейка должна быть заполнена, а слайдер должен удалиться. Поля линейки нельзя изменять.
              */
-
-            Ruler.Text = new StringBuilder(string.Empty, 20);
 
             foreach (var pair in Ruler.RulerDelimeters)
             {
@@ -246,6 +248,14 @@ namespace SmartBall
                     (pair.Value).TBox.IsReadOnly = true;
                 }
             }
+
+            ResultTextBox.Foreground = Brushes.Black;
+
+            WordTextBox.IsReadOnly = true;
+
+            Ruler.Text = new StringBuilder(string.Empty, 20);
+
+            RBtns.Visibility = Visibility.Hidden;
 
             Ruler.RulerArea.Children.Remove(Ruler.Slider);
 
