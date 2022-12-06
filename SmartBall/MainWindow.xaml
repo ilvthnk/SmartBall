@@ -50,11 +50,11 @@
                              FontSize="24"
                              IsEnabled="True"
                              Padding="0"
-                             IsReadOnly="False">
-                        Составить слово
+                             IsReadOnly="False"
+                             materialDesign:HintAssist.Hint="Составьте слово">
                     </TextBox>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
-                            ToolTip="MaterialDesignIconButton"
+                            ToolTip="Помощь"
                             IsEnabled="True"
                             VerticalAlignment="Center"
                             Grid.Column="1"    
@@ -62,9 +62,21 @@
                             Padding="8 4 8 4"
                             Margin="0 1 0 0"
                             FontSize="14"
-                            Background="LightBlue">
+                            Background="LightBlue"
+                            Click="Help">
                         <materialDesign:PackIcon Kind="Help" />
                     </Button>
+                    <Popup x:Name="popHelp" StaysOpen="False" Placement="Right">
+                        <TabControl
+                            materialDesign:ColorZoneAssist.Background="White">
+                            <TabItem Background="White" Header="Помощь">
+                                
+                            </TabItem>
+                            <TabItem Background="White" Header="Справка">
+                                
+                            </TabItem>
+                        </TabControl>
+                    </Popup>
                 </Grid>
                 <Grid Grid.Row="1" Margin="0 4 0 2">
                     <Grid.ColumnDefinitions>
@@ -75,6 +87,8 @@
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
                              Padding="4"
                              FontSize="18"
+                             materialDesign:HintAssist.Hint="Код"
+                             materialDesign:HintAssist.Background="White"
                              VerticalScrollBarVisibility="Auto"
                              HorizontalScrollBarVisibility="Auto"
                              AcceptsReturn="True"
@@ -82,7 +96,7 @@
                              IsEnabled="False">
                     </TextBox>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
-                            ToolTip="MaterialDesignIconButton"
+                            ToolTip="Загрузить задание из файла"
                             IsEnabled="True"
                             Grid.Column="1"
                             VerticalAlignment="Top"
@@ -95,7 +109,7 @@
                         <materialDesign:PackIcon Kind="FileImport" />
                     </Button>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
-                            ToolTip="MaterialDesignIconButton"
+                            ToolTip="Начать задание"
                             IsEnabled="True"
                             Grid.Column="1"                     
                             VerticalAlignment="Center"
@@ -116,10 +130,10 @@
                             Style="{StaticResource MaterialDesignTabRadioButtonRight}"
                             Margin="2"
                             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                            IsChecked="True"
+                            IsChecked="False"
                             FontWeight="Bold"
                             Content="Код"
-                            Click="RBtnCodeClicked"
+                            Checked="RBtnCodeChecked"
                             x:Name="CheckCodeBtn"/>
                         <RadioButton
                             Style="{StaticResource MaterialDesignTabRadioButtonRight}"
@@ -129,7 +143,7 @@
                             Content="Слово"
                             FontWeight="Bold"
                             x:Name="CheckGuessBtn"
-                            Click="RBtnGuessClicked"/>
+                            Checked="RBtnGuessChecked"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="2">
@@ -138,7 +152,7 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <Button Style="{StaticResource MaterialDesignIconButton}"
-                            ToolTip="MaterialDesignIconButton"
+                            ToolTip="Запустить"
                             IsEnabled="False"
                             Grid.Column="1"
                             VerticalAlignment="Center"

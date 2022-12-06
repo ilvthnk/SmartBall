@@ -6,6 +6,9 @@ using System.Windows.Media;
 using SmartBall.UserControls;
 using MaterialDesignThemes.Wpf;
 using System.Text.Json;
+using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
+using System.Security.AccessControl;
 
 namespace SmartBall
 {
@@ -20,13 +23,17 @@ namespace SmartBall
             ModeGuess
         }
 
-        private string RightAnswer = ""; // Для режима "слово"
+        private bool IsEditing = true;
+
+        private string Answer = String.Empty; // Для режима "слово"
 
         private AppMode Mode = AppMode.ModeCode; // По умолчанию
+
 
         public MainWindow()
         {
             InitializeComponent();
+            CheckCodeBtn.IsChecked = true;
         }
 
         // Для загрузки файла
@@ -34,6 +41,8 @@ namespace SmartBall
         {
             try
             {
+                if (!IsEditing) Cancel();
+
                 Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
 
                 bool? result = dialog.ShowDialog();
@@ -67,6 +76,8 @@ namespace SmartBall
 
                     Ruler.SetBallPos(task.BallPos);
 
+                    Ruler.Text.Clear();
+
                     for (int i = 0; i < task.RulerData.Length; i++)
                     {
                         Ruler.RulerDelimeters[i].TBox.Text = task.RulerData[i].ToString();
@@ -75,64 +86,60 @@ namespace SmartBall
                     }
 
                     WordTextBox.Text = task.Task;
-                    WordTextBox.IsReadOnly = true;
 
                     ResultTextBox.Foreground = Brushes.Black;
 
-                    foreach (var pair in Ruler.RulerDelimeters)
-                    {
-                        (pair.Value).TBox.IsReadOnly = true;
-                    }
-
-                    Ruler.RulerArea.Children.Remove(Ruler.Slider);
-
-                    Ruler.RulerArea.ColumnDefinitions.Remove(Ruler.Removal);
-
-                    ApplyBtn.Kind = PackIconKind.CancelOutline;
-
-                    PlayBtn.IsEnabled = true;
-
-                    RBtns.Visibility = Visibility.Hidden;
-
-                    if (task.Code == string.Empty)
+                    if (task.Code == String.Empty)
                     {
                         Mode = AppMode.ModeCode;
 
-                        ResultTextBox.Text = "";
-
-                        ResultTextBox.IsReadOnly = true;
-
-                        CodeTextBox.IsEnabled = true;
+                        ResultTextBox.Text = String.Empty;
 
                         CheckCodeBtn.IsChecked = true;
                     }
-                    else
+                    else if (task.Task == String.Empty)
                     {
                         Mode = AppMode.ModeGuess;
 
-                        ResultTextBox.IsReadOnly = false;
-
-                        CodeTextBox.IsEnabled = false;
                         CodeTextBox.Text = task.Code;
 
                         CheckGuessBtn.IsChecked = true;
                     }
+                    else if (task.Task == String.Empty && task.Code == String.Empty)
+                        throw new Exception("Файл не содержит задания");
+                    else
+                        throw new Exception("Файл не может содержать сразу два типа заданий");
+                    Apply();
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show(this, e.Message, "Ошибка");
             }
         }
 
         // Запуск в данном режиме
         private void PlayButtonClicked(object sender, RoutedEventArgs args)
         {
+            if (Mode == AppMode.ModeGuess && WordTextBox.Text == String.Empty)
+            {
+                MessageBox.Show(this, "Напиши слово", "Ошибка");
+                return;
+            }
+            if (Mode == AppMode.ModeGuess) 
+            {
+                foreach (var letter in WordTextBox.Text)
+                    if (!Ruler.Text.ToString().Contains(letter))
+                    {
+                        MessageBox.Show(this, "Слово должно состоять из элементов линейки", "Ошибка");
+                        return;
+                    }
+            }
+
             CommandExecutor cmdex = new CommandExecutor(Ruler.RulerDelimeters, CodeTextBox.Text.Trim().Replace("\r\n", string.Empty), Ruler.BallPos);
 
             try
             {
-                string UserAnswer = ResultTextBox.Text;
 
                 int SavedBallPos = Ruler.BallPos;
 
@@ -145,35 +152,50 @@ namespace SmartBall
                     Ruler.SetBallPos(cmdex.DataCursor);
                 }
 
-                RightAnswer = cmdex.Result;
+                Answer = cmdex.Result;
 
                 if (Mode == AppMode.ModeCode)
                 {
+                    if (WordTextBox.Text == Answer)
+                        ResultTextBox.Foreground = Brushes.LawnGreen;
+                    else
+                        ResultTextBox.Foreground = Brushes.DarkRed;
                     ResultTextBox.Text = cmdex.Result;
                 }
 
                 if (Mode == AppMode.ModeGuess)
                 {
-                    if (UserAnswer == RightAnswer)
+                    if (WordTextBox.Text == Answer)
                     {
                         ResultTextBox.Foreground = Brushes.LawnGreen;
+                        ResultTextBox.Text = Answer;
                     }
                     else
                     {
                         ResultTextBox.Foreground = Brushes.DarkRed;
-
+                        ResultTextBox.Text = "Неверно";
                         Ruler.SetBallPos(SavedBallPos);
                     }
                 }
             }
+            catch (InvalidOperationException)
+            {
+                Ruler.RulerDelimeters[Ruler.BallPos].error.Text = "Не понимаю 0_o";
+                Ruler.RulerDelimeters[Ruler.BallPos].errorPop.IsOpen = true;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                Ruler.RulerDelimeters[Ruler.BallPos].error.Text = "Не могу :(";
+                Ruler.RulerDelimeters[Ruler.BallPos].errorPop.IsOpen = true;
+            }
             catch (Exception e)
             {
-                MessageBox.Show(this, e.Message, "Умный шарик");
+                MessageBox.Show(this, e.Message, "Ошибка");
             }
         }
 
         // Переключение в режим "код"
-        private void RBtnCodeClicked(object sender, RoutedEventArgs args)
+        private void RBtnCodeChecked(object sender, RoutedEventArgs args)
         {
             WordTextBox.IsReadOnly = false;
 
@@ -183,20 +205,22 @@ namespace SmartBall
             {
                 Mode = AppMode.ModeCode;
 
-                ResultTextBox.IsReadOnly = true;
-
                 PlayBtn.IsEnabled = false;
 
                 ApplyBtn.Kind = PackIconKind.Check;
 
                 CodeTextBox.IsEnabled = false;
+
+                WordTextBox.IsEnabled = true;
             }
         }
 
         // Переключение в режим "слово"
-        private void RBtnGuessClicked(object sender, RoutedEventArgs args)
+        private void RBtnGuessChecked(object sender, RoutedEventArgs args)
         {
-            WordTextBox.IsReadOnly = false;
+            WordTextBox.Text = String.Empty;
+
+            WordTextBox.IsReadOnly = true;
 
             ResultTextBox.Foreground = Brushes.Black;
 
@@ -204,13 +228,13 @@ namespace SmartBall
             {
                 Mode = AppMode.ModeGuess;
 
-                ResultTextBox.IsReadOnly = true;
-
                 PlayBtn.IsEnabled = false;
 
                 ApplyBtn.Kind = PackIconKind.Check;
 
                 CodeTextBox.IsEnabled = true;
+
+                WordTextBox.IsEnabled = false;
             }
         }
 
@@ -223,6 +247,7 @@ namespace SmartBall
                 Cancel();
         }
 
+
         // Применение изменений
         private void Apply()
         {
@@ -230,11 +255,14 @@ namespace SmartBall
              * В обоих режимах линейка должна быть заполнена, а слайдер должен удалиться. Поля линейки нельзя изменять.
              */
 
+            Ruler.Text.Clear();
+
+
             foreach (var pair in Ruler.RulerDelimeters)
             {
                 if ((pair.Value).TBox.Text == string.Empty)
                 {
-                    MessageBox.Show(this, "Заполни линейку!", "Не даром я умный!");
+                    MessageBox.Show(this, "Заполни линейку!", "Ошибка");
 
                     return;
                 }
@@ -249,8 +277,6 @@ namespace SmartBall
             ResultTextBox.Foreground = Brushes.Black;
 
             WordTextBox.IsReadOnly = true;
-
-            Ruler.Text = new StringBuilder(string.Empty, 20);
 
             RBtns.Visibility = Visibility.Hidden;
 
@@ -267,15 +293,29 @@ namespace SmartBall
 
             if (Mode == AppMode.ModeCode)
             {
-                ResultTextBox.Text = "";
-
-                ResultTextBox.IsReadOnly = true;
+                ResultTextBox.Text = String.Empty;
 
                 PlayBtn.IsEnabled = true;
 
                 ApplyBtn.Kind = PackIconKind.CancelOutline;
 
                 CodeTextBox.IsEnabled = true;
+
+                foreach (var letter in WordTextBox.Text)
+                {
+                    if (!Ruler.Text.ToString().Contains(letter)) 
+                    {
+                        Cancel();
+                        MessageBox.Show(this, "Слово должно состоять из элементов линейки", "Ошибка");
+                        return;
+                    }
+                }
+                if (WordTextBox.Text == String.Empty)
+                {
+                    Cancel();
+                    MessageBox.Show(this, "Напиши слово", "Ошибка");
+                    return;
+                }
             }
 
             /* В режиме "слово":
@@ -287,20 +327,32 @@ namespace SmartBall
 
             if (Mode == AppMode.ModeGuess)
             {
-                ResultTextBox.IsReadOnly = false;
+                WordTextBox.IsEnabled = true;
+
+                WordTextBox.IsReadOnly = false;
 
                 PlayBtn.IsEnabled = true;
 
                 ApplyBtn.Kind = PackIconKind.CancelOutline;
 
-                CodeTextBox.IsEnabled = false;
+                CodeTextBox.IsEnabled = true;
+
+                CodeTextBox.IsReadOnly = true;
+
+                if (CodeTextBox.Text == String.Empty)
+                {
+                    Cancel();
+                    MessageBox.Show(this, "Напиши алгоритм", "Ошибка");
+                    return;
+                }
             }
+            CheckBtn.ToolTip = "Изменить задание";
+            IsEditing = false;
         }
 
         // Откат в режим редактирования (ничего не сохраняется)
         private void Cancel()
         {
-            WordTextBox.IsReadOnly = false;
 
             RBtns.Visibility = Visibility.Visible;
 
@@ -328,16 +380,17 @@ namespace SmartBall
 
             if (Mode == AppMode.ModeCode)
             {
-                ResultTextBox.Text = "";
-
-                ResultTextBox.IsReadOnly = true;
+                ResultTextBox.Text = String.Empty;
 
                 PlayBtn.IsEnabled = false;
 
                 ApplyBtn.Kind = PackIconKind.Check;
 
                 CodeTextBox.IsEnabled = false;
+
+                WordTextBox.IsReadOnly = false;
             }
+
 
             /* В режиме "слово":
             * - поле для ввода слова становится недоступным для редактирования
@@ -348,14 +401,28 @@ namespace SmartBall
 
             if (Mode == AppMode.ModeGuess)
             {
-                ResultTextBox.IsReadOnly = true;
+                WordTextBox.Text = String.Empty;
+
+                WordTextBox.IsReadOnly = true;
+
+                WordTextBox.IsEnabled= false;
+
+                ResultTextBox.Text = String.Empty;
 
                 PlayBtn.IsEnabled = false;
 
                 ApplyBtn.Kind = PackIconKind.Check;
 
                 CodeTextBox.IsEnabled = true;
+
+                CodeTextBox.IsReadOnly = false;
             }
+            CheckBtn.ToolTip = "Начать задание";
+            IsEditing = true;
+        }
+        private void Help(object sender, RoutedEventArgs e) 
+        {
+            popHelp.IsOpen = !popHelp.IsOpen;
         }
     }
 }

@@ -22,5 +22,10 @@ namespace SmartBall.UserControls
 
             MaterialDesignThemes.Wpf.TextFieldAssist.SetCharacterCounterVisibility(TBox, Visibility.Hidden);
         }
+
+        private void CloseError(object sender, RoutedEventArgs e) 
+        {
+            
+        }
     }
 }
