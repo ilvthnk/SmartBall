@@ -6,7 +6,7 @@
         xmlns:uc="clr-namespace:SmartBall.UserControls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="" Height="648" Width="1024">
+        Title="" Height="576" Width="1024">
     <Grid>
         <Grid Margin="2">
             <Grid.ColumnDefinitions>
