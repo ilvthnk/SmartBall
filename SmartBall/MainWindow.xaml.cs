@@ -79,6 +79,8 @@ namespace SmartBall
 
                     ResultTextBox.Foreground = Brushes.Black;
 
+                    WordTextBox.Foreground = Brushes.Black;
+
                     foreach (var pair in Ruler.RulerDelimeters)
                     {
                         (pair.Value).TBox.IsReadOnly = true;
@@ -179,6 +181,8 @@ namespace SmartBall
 
             ResultTextBox.Foreground = Brushes.Black;
 
+            WordTextBox.Foreground = Brushes.Black;
+
             if (Mode != AppMode.ModeCode)
             {
                 Mode = AppMode.ModeCode;
@@ -199,6 +203,8 @@ namespace SmartBall
             WordTextBox.IsReadOnly = false;
 
             ResultTextBox.Foreground = Brushes.Black;
+
+            WordTextBox.Foreground = Brushes.Black;
 
             if (Mode != AppMode.ModeGuess)
             {
@@ -230,6 +236,8 @@ namespace SmartBall
              * В обоих режимах линейка должна быть заполнена, а слайдер должен удалиться. Поля линейки нельзя изменять.
              */
 
+            Ruler.Text.Clear();
+
             foreach (var pair in Ruler.RulerDelimeters)
             {
                 if ((pair.Value).TBox.Text == string.Empty)
@@ -250,8 +258,6 @@ namespace SmartBall
 
             WordTextBox.IsReadOnly = true;
 
-            Ruler.Text = new StringBuilder(string.Empty, 20);
-
             RBtns.Visibility = Visibility.Hidden;
 
             Ruler.RulerArea.Children.Remove(Ruler.Slider);
@@ -267,6 +273,20 @@ namespace SmartBall
 
             if (Mode == AppMode.ModeCode)
             {
+                foreach (var letter in WordTextBox.Text)
+                {
+                    if (!(Ruler.Text.ToString().Contains(letter)))
+                    {
+                        WordTextBox.Foreground = Brushes.PaleVioletRed;
+
+                        Cancel();
+
+                        return;
+                    }
+                }
+
+                WordTextBox.Foreground = Brushes.Black;
+
                 ResultTextBox.Text = "";
 
                 ResultTextBox.IsReadOnly = true;
