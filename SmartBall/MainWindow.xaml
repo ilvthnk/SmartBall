@@ -95,32 +95,47 @@
                              x:Name="CodeTextBox"
                              IsEnabled="False">
                     </TextBox>
-                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                    <StackPanel Grid.Column="1">
+                        <Button Style="{StaticResource MaterialDesignIconButton}"
                             ToolTip="Загрузить задание из файла"
                             IsEnabled="True"
                             Grid.Column="1"
                             VerticalAlignment="Top"
                             Padding="8 4 8 4"
-                            Margin="0 1 0 0"
+                            Margin="5 0 5 5"
                             FontSize="14"
                             Background="LightBlue"
                             x:Name="FileImportBtn"
                             Click="FileImportButtonClicked">
-                        <materialDesign:PackIcon Kind="FileImport" />
-                    </Button>
-                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                            <materialDesign:PackIcon Kind="FileImport" />
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                            ToolTip="Сохранить задание в файл"
+                            IsEnabled="True"
+                            Grid.Column="1"
+                            VerticalAlignment="Top"
+                            Padding="8 4 8 4"
+                            Margin="5"
+                            FontSize="14"
+                            Background="LightBlue"
+                            x:Name="FileSaveBtn"
+                            Click="FileSaveButtonClicked">
+                            <materialDesign:PackIcon Kind="ContentSave" />
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignIconButton}"
                             ToolTip="Начать задание"
                             IsEnabled="True"
                             Grid.Column="1"                     
                             VerticalAlignment="Center"
                             Padding="8 4 8 4"
-                            Margin="0 1 0 0"
+                            Margin="5"
                             FontSize="14"
                             Background="LightBlue"
                             Click="CheckButtonClicked"
                             x:Name="CheckBtn">
-                        <materialDesign:PackIcon x:Name="ApplyBtn" Kind="Check" />
-                    </Button>
+                            <materialDesign:PackIcon x:Name="ApplyBtn" Kind="Check" />
+                        </Button>
+                    </StackPanel>
                     <StackPanel x:Name="RBtns"
                         Grid.Column="1"
                         VerticalAlignment="Bottom"

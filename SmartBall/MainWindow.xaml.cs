@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
 using System.Security.AccessControl;
+using System.Windows.Input;
 
 namespace SmartBall
 {
@@ -29,9 +30,25 @@ namespace SmartBall
 
         private AppMode Mode = AppMode.ModeCode; // По умолчанию
 
+        private static RoutedCommand help = new RoutedCommand();
+
+        private static RoutedCommand start = new RoutedCommand();
+
+        private static RoutedCommand openF = new RoutedCommand();
+
+        private static RoutedCommand saveF = new RoutedCommand();
+
 
         public MainWindow()
         {
+            help.InputGestures.Add(new KeyGesture(Key.F1));
+            start.InputGestures.Add(new KeyGesture(Key.F5));
+            openF.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control));
+            saveF.InputGestures.Add(new KeyGesture(Key.S, ModifierKeys.Control)); 
+            CommandBindings.Add(new CommandBinding(help, Help));
+            CommandBindings.Add(new CommandBinding(start, PlayButtonClicked));
+            CommandBindings.Add(new CommandBinding(openF, FileImportButtonClicked));
+            CommandBindings.Add(new CommandBinding(openF, FileSaveButtonClicked));
             InitializeComponent();
             CheckCodeBtn.IsChecked = true;
         }
@@ -118,9 +135,17 @@ namespace SmartBall
             }
         }
 
+        //сохранение в файл
+        private void FileSaveButtonClicked(object sender, RoutedEventArgs args)
+        {
+            return;
+        }
+
         // Запуск в данном режиме
         private void PlayButtonClicked(object sender, RoutedEventArgs args)
         {
+            if (IsEditing)
+                return;
             if (Mode == AppMode.ModeGuess && WordTextBox.Text == String.Empty)
             {
                 MessageBox.Show(this, "Напиши слово", "Ошибка");
