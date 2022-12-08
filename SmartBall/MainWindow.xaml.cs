@@ -39,19 +39,36 @@ namespace SmartBall
 
         private static RoutedCommand saveF = new RoutedCommand();
 
+        private static RoutedCommand ballUp = new RoutedCommand();
+
+        private static RoutedCommand ballDown = new RoutedCommand();
 
         public MainWindow()
         {
             help.InputGestures.Add(new KeyGesture(Key.F1));
             start.InputGestures.Add(new KeyGesture(Key.F5));
             openF.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control));
-            saveF.InputGestures.Add(new KeyGesture(Key.S, ModifierKeys.Control)); 
+            saveF.InputGestures.Add(new KeyGesture(Key.S, ModifierKeys.Control));
+            ballUp.InputGestures.Add(new KeyGesture(Key.U, ModifierKeys.Control));
+            ballDown.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Control));
             CommandBindings.Add(new CommandBinding(help, Help));
             CommandBindings.Add(new CommandBinding(start, PlayButtonClicked));
             CommandBindings.Add(new CommandBinding(openF, FileImportButtonClicked));
             CommandBindings.Add(new CommandBinding(saveF, FileSaveButtonClicked));
+            CommandBindings.Add(new CommandBinding(ballUp, onBallUp));
+            CommandBindings.Add(new CommandBinding(ballDown, onBallDown));
             InitializeComponent();
             CheckCodeBtn.IsChecked = true;
+        }
+
+        private void onBallUp(object sender, RoutedEventArgs args)
+        {
+            if (Ruler.BallPos < Ruler.Size - 1) Ruler.SetBallPos(Ruler.BallPos + 1);
+        }
+
+        private void onBallDown(object sender, RoutedEventArgs args)
+        {
+            if (Ruler.BallPos > 0) Ruler.SetBallPos(Ruler.BallPos - 1);
         }
 
         // Для загрузки файла
