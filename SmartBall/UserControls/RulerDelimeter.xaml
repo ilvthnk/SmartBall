@@ -25,7 +25,8 @@
         <Popup x:Name="errorPop"
                Placement="Left"
                StaysOpen="False"
-               AllowsTransparency="True">
+               AllowsTransparency="True"
+               PopupAnimation="Fade">
             <Border CornerRadius="5"
                     BorderThickness="2"
                     BorderBrush="Black"

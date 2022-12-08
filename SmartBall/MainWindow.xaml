@@ -6,8 +6,9 @@
         xmlns:uc="clr-namespace:SmartBall.UserControls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="" Height="576" Width="1024">
-    <Grid>
+        Title="" Height="576" Width="1024"
+        Deactivated="closePop">
+    <Grid x:Name="wind">
         <Grid Margin="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.3*"/>
@@ -35,7 +36,8 @@
                                          Background="LightBlue"
                                          Foreground="#232323"
                                          Padding="6"
-                                         Margin="0 0 0 4">
+                                         Margin="0 0 0 4"
+                                         x:Name="card">
                         <TextBlock  Style="{StaticResource MaterialDesignHeadline6TextBlock}"
                                     Text="Мое задание"
                                     FontSize="24"
@@ -66,16 +68,331 @@
                             Click="Help">
                         <materialDesign:PackIcon Kind="Help" />
                     </Button>
-                    <Popup x:Name="popHelp" StaysOpen="False" Placement="Right">
-                        <TabControl
-                            materialDesign:ColorZoneAssist.Background="White">
-                            <TabItem Background="White" Header="Помощь">
-                                
-                            </TabItem>
-                            <TabItem Background="White" Header="Справка">
-                                
-                            </TabItem>
-                        </TabControl>
+                    <Popup x:Name="popHelp" Placement="Center"
+                           AllowsTransparency="True" PlacementTarget="{Binding ElementName=wind}"
+                           PopupAnimation="Fade" MaxHeight="450">
+                        <Border BorderBrush="LightBlue"
+                                Background="White"
+                                BorderThickness="2"
+                                CornerRadius="5"
+                                Padding="2">
+                            <Grid Background="White">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="5*"/>
+                                </Grid.ColumnDefinitions>
+                                <TabControl TabStripPlacement="Left" Grid.Column="0"
+                                materialDesign:ColorZoneAssist.Background="White"
+                                            VerticalContentAlignment="Center">
+                                    <TabItem x:Name="tabStart" Background="White" Header="Приступая к работе" IsSelected="True">
+                                    </TabItem>
+                                    <TabItem x:Name="tabNav" Background="White" Header="Элементы программы">
+                                    </TabItem>
+                                    <TabItem x:Name="tabAlg" Background="White" Header="Пошаговая работа с приложением">
+                                    </TabItem>
+                                    <TabItem x:Name="tabSKI" Background="White" Header="СКИ">
+                                    </TabItem>
+                                </TabControl>
+                                <Grid Grid.Column="1" 
+                                            Visibility="{Binding Path=IsSelected, ElementName=tabStart, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <StackPanel Orientation="Vertical" Margin="20">
+                                        <TextBlock HorizontalAlignment="Center" Margin="15" Style="{StaticResource MaterialDesignHeadline3TextBlock}">
+                                        Умный шарик
+                                        </TextBlock>
+                                        <TextBlock HorizontalAlignment="Center" Margin="10"
+                                               Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                        Исполнитель линейных алгоритмов
+                                        </TextBlock>
+                                        <TextBlock Margin="10" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                        Чтобы изучить Систему Команд Исполнителя<LineBreak/>
+                                        перейдите на вкладку СКИ
+                                        </TextBlock>
+                                        <TextBlock Margin="10" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                        При трудностях с пониманием порядка<LineBreak/>
+                                        выполнения работы посетите вкладку<LineBreak/>
+                                        Пошаговая работа с приложением
+                                        </TextBlock>
+                                        <TextBlock Margin="10" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                        При сложностях с навигацией в программе<LineBreak/>
+                                        перейдите во вкладку Элементы программы
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                                <ScrollViewer Grid.Column="1" Visibility="{Binding Path=IsSelected, ElementName=tabNav, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0"  Margin="15 15 15 0" Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                            Элементы режима редактирования
+                                        </TextBlock>
+                                        <StackPanel Grid.Row="1"
+                                                    Margin="10"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                Размер линейки изменяется с помощью слайдера
+                                            </TextBlock>
+                                            <Slider
+                                                Orientation="Horizontal"
+                                                MinWidth="100"
+                                                Value="4"
+                                                Minimum="4"
+                                                Maximum="20"
+                                                Margin="10"
+                                                TickFrequency="1.0"
+                                                Style="{StaticResource MaterialDesignDiscreteSlider}"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="2"
+                                                    Margin="10"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                В линейку символы вносятся через поля
+                                            </TextBlock>
+                                            <TextBox
+                                                HorizontalAlignment="Right"
+                                                materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
+                                                MaxLength="1"
+                                                Width="24"
+                                                Height="36"
+                                                FontSize="20"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="3" Margin="20 10 10 10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                Переместить шарик вверх/вниз можно клавишами<LineBreak/>
+                                                Стрелка вверх/Стрелка вниз
+                                        </TextBlock>
+                                        <StackPanel Grid.Row="4"
+                                                    Margin="10"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Grid.Row="3" Margin="10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                Выбрать режим задания можно переключателем
+                                            </TextBlock>
+                                            <StackPanel
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Orientation="Vertical"
+                                                Margin="4">
+                                                <RadioButton
+                                                    Style="{StaticResource MaterialDesignTabRadioButtonRight}"
+                                                    Margin="2"
+                                                    BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                                    IsChecked="True"
+                                                    FontWeight="Bold"
+                                                    Content="Код"/>
+                                                <RadioButton
+                                                    Style="{StaticResource MaterialDesignTabRadioButtonRight}"
+                                                    Margin="2"
+                                                    BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                                    IsChecked="False"
+                                                    Content="Слово"
+                                                    FontWeight="Bold"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="5" Margin="20 10 10 10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                В зависимости от выбранного режима задания<LineBreak/>
+                                                вам предстоит заполнить либо поле "Код",<LineBreak/>
+                                                либо поле "Составьте слово"
+                                        </TextBlock>
+                                        <TextBlock Grid.Row="6"  Margin="15 15 15 0" Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                            Элемент режима решения
+                                        </TextBlock>
+                                        <StackPanel Grid.Row="7"
+                                                    Margin="10"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                Чтобы запустить алгоритм<LineBreak/>в поле "Код",
+                                                нажмите клавишу F5 или кнопку
+                                            </TextBlock>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="Запустить"
+                                                IsEnabled="True"
+                                                VerticalAlignment="Center"
+                                                Padding="8 4 8 4"
+                                                FontSize="14"
+                                                Background="LightBlue">
+                                                <materialDesign:PackIcon Kind="Play" />
+                                            </Button>
+                                        </StackPanel>
+                                        <TextBox Margin="15 15 15 0" Grid.Row="8"
+                                            VerticalAlignment="Center"
+                                            FontSize="24"
+                                            FontWeight="Bold"
+                                            Foreground="LawnGreen"
+                                            IsReadOnly="True">Результат алгоритма будет в этом поле
+                                        </TextBox>
+                                        <TextBlock Grid.Row="9"  Margin="15 15 15 0" Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                            Общие элементы
+                                        </TextBlock>
+                                        <StackPanel Grid.Row="10"
+                                                    Margin="10"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                Чтобы открыть/закрыть окно помощи,<LineBreak/>нажмите клавишу F1 или кнопку
+                                            </TextBlock>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="Помощь"
+                                                IsEnabled="True"
+                                                VerticalAlignment="Center"
+                                                Grid.Column="1"    
+                                                Grid.RowSpan="2"
+                                                Padding="8 4 8 4"
+                                                Margin="0 1 0 0"
+                                                FontSize="14"
+                                                Background="LightBlue">
+                                                <materialDesign:PackIcon Kind="Help" />
+                                            </Button>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="11"
+                                                    Margin="10"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                Чтобы открыть задание из файла,<LineBreak/>
+                                                Нажмите сочетание клавиш CTRL+O или кнопку
+                                            </TextBlock>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="Загрузить задание из файла"
+                                                IsEnabled="True"
+                                                VerticalAlignment="Center"
+                                                Grid.Column="1"    
+                                                Grid.RowSpan="2"
+                                                Padding="8 4 8 4"
+                                                Margin="0 1 0 0"
+                                                FontSize="14"
+                                                Background="LightBlue">
+                                                <materialDesign:PackIcon Kind="FileImport" />
+                                            </Button>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="12"
+                                                    Margin="10"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                Чтобы сохранить задание в файл,<LineBreak/>
+                                                нажмите сочетание клавиш CTRL+S или кнопку
+                                            </TextBlock>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="Сохранить задание в файл"
+                                                IsEnabled="True"
+                                                VerticalAlignment="Center"
+                                                Grid.Column="1"    
+                                                Grid.RowSpan="2"
+                                                Padding="8 4 8 4"
+                                                Margin="0 1 0 0"
+                                                FontSize="14"
+                                                Background="LightBlue">
+                                                <materialDesign:PackIcon Kind="ContentSave"/>
+                                            </Button>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="13"
+                                                    Margin="10"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                Чтобы начать выполнение<LineBreak/>
+                                                задания, нажмите кнопку
+                                            </TextBlock>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="Начать задание"
+                                                IsEnabled="True"
+                                                VerticalAlignment="Center"
+                                                Grid.Column="1"    
+                                                Grid.RowSpan="2"
+                                                Padding="8 4 8 4"
+                                                Margin="0 1 0 0"
+                                                FontSize="14"
+                                                Background="LightBlue">
+                                                <materialDesign:PackIcon Kind="Check"/>
+                                            </Button>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="14"
+                                                    Margin="10"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="10" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                Чтобы отредактировать<LineBreak/>
+                                                задание, нажмите кнопку
+                                            </TextBlock>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="Изменить задание"
+                                                IsEnabled="True"
+                                                VerticalAlignment="Center"
+                                                Grid.Column="1"    
+                                                Grid.RowSpan="2"
+                                                Padding="8 4 8 4"
+                                                Margin="0 1 0 0"
+                                                FontSize="14"
+                                                Background="LightBlue">
+                                                <materialDesign:PackIcon Kind="CancelOutline"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </ScrollViewer>
+                                <Grid Grid.Column="1" 
+                                            Visibility="{Binding Path=IsSelected, ElementName=tabAlg, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <StackPanel Orientation="Vertical" Margin="20">
+                                        <TextBlock Margin="15 15 15 0" Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                            Инструкция "Как создать задание и запустить"
+                                        </TextBlock>
+                                        <TextBlock Margin="15 15 15 0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                0. Загрузите задание из файла, переходите к пункту 4
+                                        </TextBlock>
+                                        <TextBlock Margin="15 15 15 0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                1. Выберите размер линейки и заполните её символами
+                                        </TextBlock>
+                                        <TextBlock Margin="15 15 15 0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                2. Выберите режим задания
+                                        </TextBlock>
+                                        <TextBlock Margin="15 15 15 0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle2TextBlock}">
+                                                2.1. Если вы выбрали "Код", напишите слово в доступном поле
+                                        </TextBlock>
+                                        <TextBlock Margin="15 15 15 0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle2TextBlock}">
+                                                2.2. Если вы выбрали "Слово", напишите алгоритм для исполнителя в доступном поле
+                                        </TextBlock>
+                                        <TextBlock Margin="15 15 15 0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                3. Нажмите кнопку начать задание
+                                        </TextBlock>
+                                        <TextBlock Margin="15 15 15 0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                4. Решите задание и запустите исполнителя
+                                        </TextBlock>
+                                        <TextBlock Margin="15" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                5. Ваш результат вы увидите в соответствующем поле
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Column="1" 
+                                            Visibility="{Binding Path=IsSelected, ElementName=tabSKI, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <StackPanel Orientation="Vertical" Margin="20">
+                                        <TextBlock Margin="15 15 15 0" Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                            Система Команд Исполнителя
+                                        </TextBlock>
+                                        <TextBlock Margin="15 15 15 0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                >[число] - шарик поднимается на [число] делений
+                                        </TextBlock>
+                                        <TextBlock Margin="15 15 15 0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                &#60;[число] - шарик опускается на [число] делений
+                                        </TextBlock>
+                                        <TextBlock Margin="15 15 15 0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                * - шарик подбирает букву из деления, на котором находится
+                                        </TextBlock>
+                                        <TextBlock Margin="15" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+                                                ! - конец программы
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
                     </Popup>
                 </Grid>
                 <Grid Grid.Row="1" Margin="0 4 0 2">
