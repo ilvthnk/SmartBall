@@ -10,6 +10,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
 using System.Security.AccessControl;
 using System.Windows.Input;
+using Microsoft.Win32;
 
 namespace SmartBall
 {
@@ -48,7 +49,7 @@ namespace SmartBall
             CommandBindings.Add(new CommandBinding(help, Help));
             CommandBindings.Add(new CommandBinding(start, PlayButtonClicked));
             CommandBindings.Add(new CommandBinding(openF, FileImportButtonClicked));
-            CommandBindings.Add(new CommandBinding(openF, FileSaveButtonClicked));
+            CommandBindings.Add(new CommandBinding(saveF, FileSaveButtonClicked));
             InitializeComponent();
             CheckCodeBtn.IsChecked = true;
         }
@@ -138,7 +139,45 @@ namespace SmartBall
         //сохранение в файл
         private void FileSaveButtonClicked(object sender, RoutedEventArgs args)
         {
-            return;
+            try
+            {
+                if (ApplyBtn.Kind == PackIconKind.CancelOutline) // только если изменения применены
+                {
+                    if (!IsEditing) Cancel();
+
+                    Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+
+                    dialog.Filter = "Text file (*.json)|*.json";
+
+                    if (dialog.ShowDialog() == true)
+                    {
+                        DemoAppTask task = new DemoAppTask()
+                        {
+                            BallPos = Ruler.BallPos,
+                            Code = CodeTextBox.Text,
+                            Task = WordTextBox.Text,
+                            RulerData = Ruler.Text.ToString() // в Ruler.Text будет актуальный текст только после сохранения изменений
+                        };
+
+                        if (Mode == AppMode.ModeCode)
+                        {
+                            task.Code = String.Empty;
+                        }
+                        else if (Mode == AppMode.ModeGuess)
+                        {
+                            task.Task = String.Empty;
+                        }
+
+                        string serialized = JsonSerializer.Serialize<DemoAppTask>(task);
+
+                        File.WriteAllText(dialog.FileName, serialized);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(this, e.Message, "Ошибк2423423а");
+            }
         }
 
         // Запуск в данном режиме
@@ -285,9 +324,9 @@ namespace SmartBall
 
             foreach (var pair in Ruler.RulerDelimeters)
             {
-                if ((pair.Value).TBox.Text == string.Empty)
+                if ((pair.Value).TBox.Text == string.Empty || (pair.Value).TBox.Text == " ")
                 {
-                    MessageBox.Show(this, "Заполни линейку!", "Ошибка");
+                    MessageBox.Show(this, "Заполни линейку (пробелы не считаются)!", "Ошибка");
 
                     return;
                 }
