@@ -176,7 +176,7 @@ namespace SmartBall
             }
             catch (Exception e)
             {
-                MessageBox.Show(this, e.Message, "Ошибк2423423а");
+                MessageBox.Show(this, e.Message, "Ошибка");
             }
         }
 
