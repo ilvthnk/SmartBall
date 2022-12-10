@@ -149,34 +149,16 @@ namespace SmartBall
                         Ruler.Text.Append(task.Data[i]);
                     }
 
-                    WordTextBox.Text = task.Task;
-
                     ResultTextBox.Foreground = Brushes.Black;
 
-                    if (task.Code == String.Empty)
-                    {
-                        Mode = AppMode.ModeCode;
+                    Mode = AppMode.ModeGuess;
 
-                        HintAssist.SetHint(WordTextBox, "Слово, которое вы хотите составить");
+                    HintAssist.SetHint(WordTextBox, "Ваш ответ");
 
-                        ResultTextBox.Text = String.Empty;
+                    CodeTextBox.Text = task.Code;
 
-                        CheckCodeBtn.IsChecked = true;
-                    }
-                    else if (task.Task == String.Empty)
-                    {
-                        Mode = AppMode.ModeGuess;
+                    CheckGuessBtn.IsChecked = true;
 
-                        HintAssist.SetHint(WordTextBox, "Ваш ответ");
-
-                        CodeTextBox.Text = task.Code;
-
-                        CheckGuessBtn.IsChecked = true;
-                    }
-                    else if (task.Task == String.Empty && task.Code == String.Empty)
-                        throw new Exception("Ошибка чтения файла!");
-                    else
-                        throw new Exception("Ошибка чтения файла!");
                     Apply();
                 }
             }
@@ -193,7 +175,12 @@ namespace SmartBall
             {
                 if (ApplyBtn.Kind == PackIconKind.CancelOutline) // только если изменения применены
                 {
-                    if (!IsEditing) Cancel();
+                    if (Mode != AppMode.ModeGuess)
+                    {
+                        Cancel();
+
+                        return;
+                    }
 
                     Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
 
@@ -207,18 +194,8 @@ namespace SmartBall
                         {
                             Position = Ruler.BallPos,
                             Code = CodeTextBox.Text,
-                            Task = WordTextBox.Text,
                             Data = Ruler.Text.ToString() // в Ruler.Text будет актуальный текст только после сохранения изменений
                         };
-
-                        if (Mode == AppMode.ModeCode)
-                        {
-                            task.Code = String.Empty;
-                        }
-                        else if (Mode == AppMode.ModeGuess)
-                        {
-                            task.Task = String.Empty;
-                        }
 
                         string serialized = JsonSerializer.Serialize<DemoAppTask>(task);
 
@@ -228,7 +205,7 @@ namespace SmartBall
             }
             catch (Exception e)
             {
-                MessageBox.Show(this, "Не удалось сохранить файл!", "Ошибка!");
+                MessageBox.Show(this, e.Message, "Ошибка!");
             }
         }
 
