@@ -122,11 +122,8 @@ namespace SmartBall
 
                     task = JsonSerializer.Deserialize<DemoAppTask>(File.ReadAllText(fileName));
 
-                    if (task == null)
+                    if (task == null || task.Data == null)
                         throw new Exception("Ошибка чтения файла!");
-
-                    if (task.Data == null)
-                        throw new Exception("Линейка должна быть заполнена!");
 
                     task.Data = task.Data.Trim().Replace("\r\n", string.Empty).Replace(" ", string.Empty);
 
@@ -177,15 +174,15 @@ namespace SmartBall
                         CheckGuessBtn.IsChecked = true;
                     }
                     else if (task.Task == String.Empty && task.Code == String.Empty)
-                        throw new Exception("Файл не содержит задания!");
+                        throw new Exception("Ошибка чтения файла!");
                     else
-                        throw new Exception("Файл не может содержать сразу два типа заданий!");
+                        throw new Exception("Ошибка чтения файла!");
                     Apply();
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show(this, e.Message, "Неизвестная ошибка!");
+                MessageBox.Show(this, e.Message, "Ошибка!");
             }
         }
 
@@ -231,7 +228,7 @@ namespace SmartBall
             }
             catch (Exception e)
             {
-                MessageBox.Show(this, e.Message, "Неизвестная ошибка!");
+                MessageBox.Show(this, "Не удалось сохранить файл!", "Ошибка!");
             }
         }
 
