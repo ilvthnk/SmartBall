@@ -49,8 +49,8 @@ namespace SmartBall
             start.InputGestures.Add(new KeyGesture(Key.F5));
             openF.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control));
             saveF.InputGestures.Add(new KeyGesture(Key.S, ModifierKeys.Control));
-            ballUp.InputGestures.Add(new KeyGesture(Key.Up));
-            ballDown.InputGestures.Add(new KeyGesture(Key.Down));
+            ballUp.InputGestures.Add(new KeyGesture(Key.U, ModifierKeys.Control));
+            ballDown.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Control));
 
             CommandBindings.Add(new CommandBinding(help, Help));
             CommandBindings.Add(new CommandBinding(start, PlayButtonClicked));
@@ -110,6 +110,8 @@ namespace SmartBall
 
                 Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
 
+                dialog.InitialDirectory = "C:\\Users\\" + System.Environment.UserName + "\\AppData\\Local\\Programs\\SmartBall\\TaskLib";
+
                 bool? result = dialog.ShowDialog();
 
                 DemoAppTask task = new DemoAppTask();
@@ -123,31 +125,31 @@ namespace SmartBall
                     if (task == null)
                         throw new Exception("Ошибка чтения файла!");
 
-                    if (task.RulerData == null)
+                    if (task.Data == null)
                         throw new Exception("Линейка должна быть заполнена!");
 
-                    task.RulerData = task.RulerData.Trim().Replace("\r\n", string.Empty).Replace(" ", string.Empty);
+                    task.Data = task.Data.Trim().Replace("\r\n", string.Empty).Replace(" ", string.Empty);
 
-                    if (task.RulerData.Length < 4 || task.RulerData.Length > 20)
+                    if (task.Data.Length < 4 || task.Data.Length > 20)
                         throw new Exception("На линейке должно быть от 4 и до 20 символов!");
 
-                    Ruler.Slider.Value = task.RulerData.Length;
+                    Ruler.Slider.Value = task.Data.Length;
 
-                    if (task.BallPos < 0 || task.BallPos >= task.RulerData.Length)
-                        task.BallPos = 0;
+                    if (task.Position < 0 || task.Position >= task.Data.Length)
+                        task.Position = 0;
 
-                    if (Ruler.BallPos >= task.RulerData.Length)
-                        Ruler.BallPos = task.RulerData.Length - 1;
+                    if (Ruler.BallPos >= task.Data.Length)
+                        Ruler.BallPos = task.Data.Length - 1;
 
-                    Ruler.SetBallPos(task.BallPos);
+                    Ruler.SetBallPos(task.Position);
 
                     Ruler.Text.Clear();
 
-                    for (int i = 0; i < task.RulerData.Length; i++)
+                    for (int i = 0; i < task.Data.Length; i++)
                     {
-                        Ruler.RulerDelimeters[i].TBox.Text = task.RulerData[i].ToString();
+                        Ruler.RulerDelimeters[i].TBox.Text = task.Data[i].ToString();
 
-                        Ruler.Text.Append(task.RulerData[i]);
+                        Ruler.Text.Append(task.Data[i]);
                     }
 
                     WordTextBox.Text = task.Task;
@@ -158,6 +160,8 @@ namespace SmartBall
                     {
                         Mode = AppMode.ModeCode;
 
+                        HintAssist.SetHint(WordTextBox, "Слово, которое вы хотите составить");
+
                         ResultTextBox.Text = String.Empty;
 
                         CheckCodeBtn.IsChecked = true;
@@ -166,20 +170,22 @@ namespace SmartBall
                     {
                         Mode = AppMode.ModeGuess;
 
+                        HintAssist.SetHint(WordTextBox, "Ваш ответ");
+
                         CodeTextBox.Text = task.Code;
 
                         CheckGuessBtn.IsChecked = true;
                     }
                     else if (task.Task == String.Empty && task.Code == String.Empty)
-                        throw new Exception("Файл не содержит задания");
+                        throw new Exception("Файл не содержит задания!");
                     else
-                        throw new Exception("Файл не может содержать сразу два типа заданий");
+                        throw new Exception("Файл не может содержать сразу два типа заданий!");
                     Apply();
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show(this, e.Message, "Ошибка");
+                MessageBox.Show(this, e.Message, "Неизвестная ошибка!");
             }
         }
 
@@ -196,14 +202,16 @@ namespace SmartBall
 
                     dialog.Filter = "Text file (*.json)|*.json";
 
+                    dialog.InitialDirectory = "C:\\Users\\" + System.Environment.UserName + "\\AppData\\Local\\Programs\\SmartBall\\TaskLib";
+
                     if (dialog.ShowDialog() == true)
                     {
                         DemoAppTask task = new DemoAppTask()
                         {
-                            BallPos = Ruler.BallPos,
+                            Position = Ruler.BallPos,
                             Code = CodeTextBox.Text,
                             Task = WordTextBox.Text,
-                            RulerData = Ruler.Text.ToString() // в Ruler.Text будет актуальный текст только после сохранения изменений
+                            Data = Ruler.Text.ToString() // в Ruler.Text будет актуальный текст только после сохранения изменений
                         };
 
                         if (Mode == AppMode.ModeCode)
@@ -223,7 +231,7 @@ namespace SmartBall
             }
             catch (Exception e)
             {
-                MessageBox.Show(this, e.Message, "Ошибка");
+                MessageBox.Show(this, e.Message, "Неизвестная ошибка!");
             }
         }
 
@@ -234,7 +242,7 @@ namespace SmartBall
                 return;
             if (Mode == AppMode.ModeGuess && WordTextBox.Text == String.Empty)
             {
-                MessageBox.Show(this, "Напиши слово", "Ошибка");
+                MessageBox.Show(this, "Напиши слово!", "Ошибка");
                 return;
             }
             if (Mode == AppMode.ModeGuess) 
@@ -242,7 +250,7 @@ namespace SmartBall
                 foreach (var letter in WordTextBox.Text)
                     if (!Ruler.Text.ToString().Contains(letter))
                     {
-                        MessageBox.Show(this, "Слово должно состоять из элементов линейки", "Ошибка");
+                        MessageBox.Show(this, "Слово должно состоять из элементов линейки!", "Ошибка");
                         return;
                     }
             }
@@ -314,6 +322,8 @@ namespace SmartBall
 
             if (Mode != AppMode.ModeCode)
             {
+                HintAssist.SetHint(WordTextBox, "Слово, которое вы хотите составить");
+
                 Mode = AppMode.ModeCode;
 
                 PlayBtn.IsEnabled = false;
@@ -337,6 +347,8 @@ namespace SmartBall
 
             if (Mode != AppMode.ModeGuess)
             {
+                HintAssist.SetHint(WordTextBox, "Ваш ответ");
+
                 Mode = AppMode.ModeGuess;
 
                 PlayBtn.IsEnabled = false;
@@ -417,16 +429,19 @@ namespace SmartBall
                     if (!Ruler.Text.ToString().Contains(letter)) 
                     {
                         Cancel();
-                        MessageBox.Show(this, "Слово должно состоять из элементов линейки", "Ошибка");
+                        MessageBox.Show(this, "Слово должно состоять из элементов линейки!", "Ошибка");
                         return;
                     }
                 }
+
                 if (WordTextBox.Text == String.Empty)
                 {
                     Cancel();
-                    MessageBox.Show(this, "Напиши слово", "Ошибка");
+                    MessageBox.Show(this, "Напиши слово!", "Ошибка");
                     return;
                 }
+
+                HintAssist.SetHint(WordTextBox, "Слово, которое вы хотите составить");
             }
 
             /* В режиме "слово":
@@ -453,9 +468,11 @@ namespace SmartBall
                 if (CodeTextBox.Text == String.Empty)
                 {
                     Cancel();
-                    MessageBox.Show(this, "Напиши алгоритм", "Ошибка");
+                    MessageBox.Show(this, "Напиши алгоритм!", "Ошибка");
                     return;
                 }
+
+                HintAssist.SetHint(WordTextBox, "Ваш ответ");
             }
             CheckBtn.ToolTip = "Изменить задание";
             IsEditing = false;
