@@ -68,6 +68,8 @@ namespace SmartBall.UserControls
         {
             Size--;
 
+            if (BallPos == Size) SetBallPos(BallPos - 1);
+
             var rd = RulerDelimeters[Size];
 
             TextBoxArea.Children.Remove(rd);
